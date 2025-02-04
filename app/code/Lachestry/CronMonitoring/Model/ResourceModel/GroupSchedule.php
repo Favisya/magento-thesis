@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Lachestry\CronMonitoring\Model\ResourceModel;
 
 use Lachestry\CronMonitoring\Model\Source\CronGroupsSource;
-use Oggetto\CronGroupTable\Model\ResourceModel\Schedule as ScheduleResource;
+use Magento\Cron\Model\ResourceModel\Schedule as ScheduleResource;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 
 class GroupSchedule extends ScheduleResource
