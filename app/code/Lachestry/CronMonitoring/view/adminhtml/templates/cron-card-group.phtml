@@ -1,0 +1,9 @@
+<?php
+/** @var Lachestry\CronMonitoring\Block\Adminhtml\CronCardDesk $block */
+?>
+
+<div class="cron-card__desk">
+    <?php foreach ($block->getGroupNames() as $name): ?>
+        <?= $block->getChildBlock('lachestry_cron_card')->setData('group', $name)->toHtml() ?>
+    <?php endforeach; ?>
+</div>

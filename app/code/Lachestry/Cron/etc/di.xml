@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="CronLoggerHandler" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/cron_job_codes.log</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="CronLogger" type="Monolog\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">cron_job_codes</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="all" xsi:type="object">CronLoggerHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+</config>

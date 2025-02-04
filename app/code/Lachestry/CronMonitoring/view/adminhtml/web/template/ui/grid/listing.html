@@ -1,0 +1,14 @@
+<table class="data-grid">
+    <thead>
+    <tr each="data: getVisible(), as: '$col'" render="getHeader()"/>
+    </thead>
+    <tbody>
+    <tr class="data-row" repeat="foreach: rows, item: '$row'">
+        <td outerfasteach="data: getVisible(), as: '$col'"
+            css="$parent.getCellClass($row(), $col)" click="getFieldHandler($row())" template="getBody()"/>
+    </tr>
+    <tr ifnot="hasData()" class="data-grid-tr-no-data">
+        <td attr="colspan: countVisible()" translate="'We couldn\'t find any records.'"/>
+    </tr>
+    </tbody>
+</table>

@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <preference
+        for="Lachestry\CronMonitoring\Api\CronGroupRepositoryInterface"
+        type="Lachestry\CronMonitoring\Model\CronGroupRepository"
+    />
+
+    <virtualType name="CronMonitorLoggerHandler" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/cron_monitoring.log</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="CronMonitorLogger" type="Monolog\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">cron_monitoring</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="all" xsi:type="object">CronMonitorLoggerHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Lachestry\CronMonitoring\Model\CronGroupRepository">
+        <arguments>
+            <argument name="logger" xsi:type="object">CronMonitorLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Lachestry\CronMonitoring\Ui\Schedule\DataProvider">
+        <arguments>
+            <argument name="statusMap" xsi:type="array">
+                <item name="success" xsi:type="string">cron-status_success</item>
+                <item name="error" xsi:type="string">cron-status_error</item>
+                <item name="missed" xsi:type="string">cron-status_missed</item>
+                <item name="pending" xsi:type="string">cron-status_pending</item>
+                <item name="running" xsi:type="string">cron-status_running</item>
+            </argument>
+        </arguments>
+    </type>
+
+</config>

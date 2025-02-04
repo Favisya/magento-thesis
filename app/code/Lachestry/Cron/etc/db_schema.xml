@@ -1,0 +1,19 @@
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="lachestry_job_codes_info">
+        <column xsi:type="smallint" name="id" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="varchar" name="job_code_name" length="100" comment="Job code"/>
+        <column xsi:type="varchar" name="schedule" length="50" comment="job schedule"/>
+        <column xsi:type="varchar" name="module" length="150" comment="module"/>
+        <column xsi:type="varchar" name="config_path" length="200" comment="config path"/>
+        <column xsi:type="varchar" name="group" length="100" comment="cron group"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+
+        <constraint xsi:type="unique" referenceId="GA_JOB_CODE_NAME_UNIQUE">
+            <column name="job_code_name"/>
+        </constraint>
+    </table>
+</schema>

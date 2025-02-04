@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">cron_schedule_listing.cron_schedule_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>cron_schedules</spinner>
+        <deps>
+            <dep>cron_schedule_listing.cron_schedule_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="cron_schedule_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <updateUrl path="mui/index/render"/>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">schedule_id</param>
+            </storageConfig>
+        </settings>
+        <dataProvider class="Lachestry\CronMonitoring\Ui\Schedule\DataProvider"
+                      name="cron_schedule_listing_data_source">
+            <settings>
+                <requestFieldName>schedule_id</requestFieldName>
+                <primaryFieldName>schedule_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>false</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <filters name="listing_filters"/>
+        <paging name="listing_paging"/>
+        <exportButton name="export_button"/>
+        <columnsControls name="columns_controls"/>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="cron_schedules">
+
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Lachestry_CronMonitoring/js/grid/listing</item>
+            </item>
+        </argument>
+
+        <column
+            name="schedule_id"
+            sortOrder="10"
+        >
+            <settings>
+                <filter>text</filter>
+                <sortable>true</sortable>
+                <label translate="true">ID</label>
+            </settings>
+        </column>
+
+        <column
+            name="job_code"
+            sortOrder="20"
+        >
+            <settings>
+                <filter>text</filter>
+                <sortable>true</sortable>
+                <label translate="true">Job Code</label>
+            </settings>
+        </column>
+
+        <column
+            name="status"
+            sortOrder="30"
+        >
+            <settings>
+                <filter>text</filter>
+                <sortable>true</sortable>
+                <label translate="true">Status</label>
+            </settings>
+        </column>
+
+        <column
+            name="module"
+            sortOrder="40"
+        >
+            <settings>
+                <filter>text</filter>
+                <sortable>true</sortable>
+                <label translate="true">Module</label>
+            </settings>
+        </column>
+
+        <column
+            name="messages"
+            sortOrder="50"
+            class="Lachestry\CronMonitoring\Ui\Schedule\Grid\Message"
+        >
+            <settings>
+                <filter>text</filter>
+                <sortable>true</sortable>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <label translate="true">Messages</label>
+            </settings>
+        </column>
+
+        <column
+            name="created_at"
+            sortOrder="60"
+        >
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <sortable>true</sortable>
+                <sorting>desc</sorting>
+                <label translate="true">Created At</label>
+            </settings>
+        </column>
+
+
+        <column
+            name="scheduled_at"
+            sortOrder="70"
+        >
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <sortable>true</sortable>
+                <label translate="true">Scheduled At</label>
+            </settings>
+        </column>
+
+        <column
+            name="executed_at"
+            sortOrder="80"
+        >
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <sortable>true</sortable>
+                <label translate="true">Executed At</label>
+            </settings>
+        </column>
+
+        <column
+            name="finished_at"
+            sortOrder="90"
+        >
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <sortable>true</sortable>
+                <label translate="true">Finished At</label>
+            </settings>
+        </column>
+
+        <column
+            name="schedule"
+            sortOrder="100"
+        >
+            <settings>
+                <dataType>text</dataType>
+                <sortable>true</sortable>
+                <label translate="true">Time Schedule</label>
+            </settings>
+        </column>
+
+        <column
+            name="view"
+            class="Lachestry\CronMonitoring\Ui\Schedule\Grid\LinkToSetting"
+            sortOrder="120"
+        >
+            <settings>
+                <dataType>text</dataType>
+                <sortable>false</sortable>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <label translate="true">Setting Link</label>
+            </settings>
+        </column>
+    </columns>
+</listing>

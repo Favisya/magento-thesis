@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="advanced" translate="label" sortOrder="999999">
+            <label>Advanced</label>
+        </tab>
+        <section id="system">
+            <group id="cron_monitoring" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="0"
+                   showInStore="0">
+                <label>Cron Monitoring</label>
+                <field id="time_before_stuck" translate="label" type="text" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Time Before Jobs In Group Marked Stuck</label>
+                    <frontend_model>Lachestry\CronMonitoring\Block\Adminhtml\Renderer\StuckThreshold</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                </field>
+
+                <field id="rows_in_cron_group_card" translate="label" type="text" sortOrder="20" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Rows In Cron Group Card</label>
+                    <validate>required-entry required-number validate-zero-or-greater</validate>
+                </field>
+
+                <field id="row_height_in_cron_group_card" translate="label" type="text" sortOrder="30" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Row Height (rem) In Group Card</label>
+                    <validate>required-entry required-number validate-zero-or-greater</validate>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

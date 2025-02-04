@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add
+            id="Lachestry_CronMonitoring::cron_monitoring"
+            title="Cron Processes Monitor"
+            module="Lachestry_CronMonitoring"
+            translate="title"
+            sortOrder="1000"
+            action="cron_monitoring/cron"
+            parent="Magento_Backend::system_tools"
+            resource="Lachestry_CronMonitoring::cron_monitoring"
+        />
+    </menu>
+</config>

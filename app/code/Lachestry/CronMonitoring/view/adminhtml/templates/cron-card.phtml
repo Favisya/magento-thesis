@@ -1,0 +1,45 @@
+<?php
+/** @var Lachestry\CronMonitoring\Block\Adminhtml\CronCard $block */
+/** @var Lachestry\CronMonitoring\ViewModel\CronCard $viewModel */
+
+$groupName = $block->getGroup();
+$viewModel = $block->getViewModel();
+
+$codes      = $viewModel->getGroupCodes($groupName);
+$settings   = $viewModel->getGroupsSettings($groupName);
+$url        = $viewModel->getUrl($groupName);
+$rowHeight  = $viewModel->getListHeigth();
+?>
+
+<div class="cron-card">
+    <div class="cron-card__group-name">
+        <a class="cron-card__title-url" href="<?= $url ?>">
+            <b>
+                <?= $groupName . $block->getLinkSvg()?>
+            </b>
+        </a>
+    </div>
+
+    <div class="cron-card__element" style="height: <?= $rowHeight ?>rem">
+        <ul class="cron-card__list">
+            <?php foreach ($codes as $code): ?>
+                <li class="cron-card__list-item"><?= $code['name'] ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+
+    <div class="cron-card__setting">
+        <details>
+            <summary class="cron-card__list_expanded">
+                <b>
+                    <?= __('Expand Settings') ?>
+                </b>
+            </summary>
+            <ul class="cron-card__list ">
+                <?php foreach ($settings as $key => $setting): ?>
+                    <li class="cron-card__list-item"><?= __($key) . ': ' . $setting['value'] ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </details>
+    </div>
+</div>

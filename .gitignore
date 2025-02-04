@@ -84,15 +84,12 @@ setup/*
 
 auth.json
 log/capistrano.log
-app/design/frontend/Mygento/goldapple/web/css/*.css
-app/design/frontend/Mygento/goldapple/web/css/theme/**/*.css
-!app/design/frontend/Mygento/goldapple/web/css/vendor
 
 /generated
 /vue-dist
 /storybook-static
 
-app/design/frontend/Mygento/goldapple/web/scss/.idea/
+app/design/frontend/Mygento/lachestry/web/scss/.idea/
 
 gulp/.idea/
 gulp/config/browser-sync.json

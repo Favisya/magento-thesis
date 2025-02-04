@@ -1,0 +1,16 @@
+{
+    "lachestry_job_codes_info": {
+        "column": {
+            "id": true,
+            "job_code_name": true,
+            "schedule": true,
+            "module": true,
+            "config_path": true,
+            "group": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "LACHESTRY_JOB_CODES_INFO_JOB_CODE_NAME": true
+        }
+    }
+}

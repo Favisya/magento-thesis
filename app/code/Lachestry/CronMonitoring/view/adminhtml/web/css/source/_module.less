@@ -1,0 +1,131 @@
+@cron-color__status_success: #A0D27F;
+@cron-color__status_error: #F28A76;
+@cron-color__status_missed: #FDF9B9;
+@cron-color__status_running: #B4A7D6;
+@cron-color__status_pending: #A5CDEC;
+
+.cron-card {
+    display: block;
+
+    width: 18%;
+    height: fit-content;
+
+    padding: 0;
+
+    border: @color-brownie 2px solid;
+    border-bottom: none;
+
+    &__element {
+        margin-top: 0;
+
+        overflow: auto;
+    }
+
+    &__setting {
+        margin-top: 0;
+    }
+
+    &__group-name {
+        display: flex;
+        justify-content: center;
+
+        padding: 3px;
+
+        border-bottom: @color-brownie 2px solid;
+        color: white;
+        background: @color-brownie;
+    }
+
+    &__list {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+
+        &_expanded {
+            display: flex;
+            justify-content: center;
+
+            cursor: pointer;
+
+            border-bottom: @color-brownie 2px solid;
+            list-style: none;
+        }
+    }
+
+    &__list-item {
+        height: 2.5rem;
+
+        marker: none;
+        border-bottom: @color-gray-light3 2px solid;
+
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        &:last-child {
+            border-bottom: @color-brownie 2px solid;
+        }
+    }
+
+    &__title-url {
+        text-decoration: none;
+        color: white;
+
+        &:hover {
+            color: white;
+            text-decoration: none;
+        }
+    }
+
+    &__desk {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem 2%;
+    }
+}
+
+td.cron-status {
+    &_success {
+        background-color: @cron-color__status_success !important;
+    }
+
+    &_error {
+        background-color: @cron-color__status_error !important;
+    }
+
+    &_missed {
+        background-color: @cron-color__status_missed !important;
+    }
+
+    &_running {
+        background-color: @cron-color__status_running !important;
+    }
+
+    &_pending {
+        background-color: @cron-color__status_pending !important;
+    }
+}
+
+.cron-message {
+    &__overflow {
+        max-width: 30rem;
+
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+
+        &:hover {
+            width: 30rem;
+
+            text-overflow: clip;
+            white-space: normal;
+            word-break: break-all;
+        }
+    }
+}
+
+.body-cron-monitoring-grid-base {
+    .data-grid {
+        margin-top: 5rem;
+    }
+}
