@@ -57,7 +57,8 @@
         "phpstan/phpstan": "^1.9",
         "phpunit/phpunit": "^9.5",
         "sebastian/phpcpd": "^6.0",
-        "symfony/finder": "^5.4"
+        "symfony/finder": "^5.4",
+        "lachestry/m2-base": "^1"
     },
     "conflict": {
         "gene/bluefoot": "*"
@@ -78,6 +79,10 @@
         {
             "type": "composer",
             "url": "https://repo.magento.com/"
+        },
+        {
+            "type": "vcs",
+            "url": "ssh://git@git.lachestry.tech:2222/magento-2-free-extensions/base.git"
         }
     ],
     "extra": {

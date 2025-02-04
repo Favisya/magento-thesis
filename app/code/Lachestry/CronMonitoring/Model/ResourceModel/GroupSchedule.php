@@ -34,7 +34,7 @@ class GroupSchedule extends ScheduleResource
 
     protected function initGroupTable(): string
     {
-        $table = $this->getScheduleTableByGroupId($this->group);
+        $table = 'cron_schedule';
         $this->_init($table, self::ID);
 
         return $table;
