@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding="utf-8" ?>
+
+<config
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd"
+>
+    <default>
+        <lachestry_telegram>
+            <general>
+                <base_url>https://api.telegram.org/bot</base_url>
+                <send_method>sendMessage</send_method>
+                <get_method>getUpdates</get_method>
+            </general>
+        </lachestry_telegram>
+    </default>
+</config>
