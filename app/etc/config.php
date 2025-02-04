@@ -333,6 +333,7 @@ return [
         'Lachestry_CronMonitoring' => 1,
         'PayPal_Braintree' => 1,
         'PayPal_BraintreeGraphQl' => 1,
-        'Temando_ShippingRemover' => 1
+        'Temando_ShippingRemover' => 1,
+        'Lachestry_Telegram' => 1,
     ]
 ];
