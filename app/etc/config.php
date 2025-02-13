@@ -331,9 +331,10 @@ return [
         'Lachestry_Configuration' => 1,
         'Lachestry_Cron' => 1,
         'Lachestry_CronMonitoring' => 1,
+        'Lachestry_Telegram' => 1,
+        'Lachestry_Notifier' => 1,
         'PayPal_Braintree' => 1,
         'PayPal_BraintreeGraphQl' => 1,
-        'Temando_ShippingRemover' => 1,
-        'Lachestry_Telegram' => 1,
+        'Temando_ShippingRemover' => 1
     ]
 ];

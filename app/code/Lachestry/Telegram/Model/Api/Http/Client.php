@@ -29,6 +29,10 @@ class Client
                 $client->post($url, $rawData);
             }
 
+            if ($method == 'GET' ) {
+                $client->get($url);
+            }
+
             $this->logger->info(
                 'telegram api request',
                 [
@@ -43,7 +47,7 @@ class Client
             }
 
             $body = $client->getBody();
-            return $this->jsonSerializer->unserialize($body);
+            return $this->jsonSerializer->unserialize($body)['result'] ?? [];
         } catch (\Exception $e) {
             $this->logger->error(
                 'Error to send request',

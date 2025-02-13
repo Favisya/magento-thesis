@@ -6,6 +6,27 @@
         type="Lachestry\Telegram\Model\Api\TelegramProvider"
     />
 
+    <preference
+        for="Lachestry\Telegram\Api\Data\TelegramChatInterface"
+        type="Lachestry\Telegram\Model\TelegramChat"
+    />
+
+    <virtualType name="TelegramCronLoggerHandler" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/telegram_cron.api.log</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="TelegramCronLogger" type="Monolog\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">telegram_cron_api</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="all" xsi:type="object">TelegramCronLoggerHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+
     <virtualType name="TelegramLoggerHandler" type="Magento\Framework\Logger\Handler\Base">
         <arguments>
             <argument name="fileName" xsi:type="string">/var/log/telegram.api.log</argument>
@@ -31,6 +52,22 @@
     <type name="Lachestry\Telegram\Model\Api\TelegramProvider">
         <arguments>
             <argument name="logger" xsi:type="object">TelegramLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Lachestry\Telegram\Cron\BotUpdatesCollect">
+        <arguments>
+            <argument name="logger" xsi:type="object">TelegramCronLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="telegram_chat_listing_data_source" xsi:type="string">
+                    Lachestry\Telegram\Model\ResourceModel\TelegramChat\Grid\Collection
+                </item>
+            </argument>
         </arguments>
     </type>
 </config>

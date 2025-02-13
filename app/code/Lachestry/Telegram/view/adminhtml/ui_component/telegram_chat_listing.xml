@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<listing name="telegram_chat_listing"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">telegram_chat_listing.telegram_chat_listing_data_source</item>
+            <item name="deps" xsi:type="string">telegram_chat_listing.telegram_chat_listing_data_source</item>
+        </item>
+        <item name="spinner" xsi:type="string">telegram_chat_columns</item>
+    </argument>
+
+    <dataSource name="telegram_chat_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">Lachestry\Telegram\Ui\TelegramChat\DataProvider</argument>
+            <argument name="name" xsi:type="string">telegram_chat_listing_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+            <argument name="collectionFactory" xsi:type="object">Lachestry\Telegram\Model\ResourceModel\TelegramChat\Grid\CollectionFactory</argument>
+        </argument>
+        <settings>
+            <updateUrl path="mui/index/render"/>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">id</param>
+            </storageConfig>
+        </settings>
+    </dataSource>
+
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>false</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <filters name="listing_filters"/>
+        <exportButton name="export_button"/>
+        <columnsControls name="columns_controls"/>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+
+    <columns name="telegram_chat_columns">
+        <settings>
+            <editorConfig>
+                <param name="selectProvider" xsi:type="string">telegram_chat_listing.telegram_chat_listing_data_source</param>
+                <param name="enabled" xsi:type="boolean">true</param>
+                <param name="indexField" xsi:type="string">id</param>
+                <param name="clientConfig" xsi:type="array">
+                    <item name="saveUrl" path="*/*/inlineEdit" xsi:type="url"/>
+                    <item name="validateBeforeSave" xsi:type="boolean">false</item>
+                </param>
+            </editorConfig>
+            <childDefaults>
+                <param name="fieldAction" xsi:type="array">
+                    <item name="provider" xsi:type="string">telegram_chat_listing.telegram_chat_listing_data_source</item>
+                    <item name="target" xsi:type="string">startEdit</item>
+                    <item name="params" xsi:type="array">
+                        <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
+                        <item name="1" xsi:type="boolean">true</item>
+                    </item>
+                </param>
+            </childDefaults>
+        </settings>
+
+        <!-- Selections Column -->
+        <selectionsColumn name="ids" sortOrder="10">
+            <settings>
+                <indexField>id</indexField>
+            </settings>
+        </selectionsColumn>
+
+        <!-- ID Column -->
+        <column name="id" sortOrder="20">
+            <settings>
+                <filter>textRange</filter>
+                <dataType>number</dataType>
+                <sortable>true</sortable>
+                <sorting>asc</sorting>
+                <label translate="true">ID</label>
+            </settings>
+        </column>
+
+        <!-- Chat ID -->
+        <column name="chat_id" sortOrder="30">
+            <settings>
+                <filter>text</filter>
+                <dataType>text</dataType>
+                <sortable>true</sortable>
+                <label translate="true">Chat ID</label>
+            </settings>
+        </column>
+
+        <!-- Chat Name -->
+        <column name="chat_name" sortOrder="40">
+            <settings>
+                <filter>text</filter>
+                <dataType>text</dataType>
+                <sortable>true</sortable>
+                <label translate="true">Chat Name</label>
+            </settings>
+        </column>
+
+        <!-- User Name -->
+        <column name="user_name" sortOrder="50">
+            <settings>
+                <filter>text</filter>
+                <dataType>text</dataType>
+                <sortable>true</sortable>
+                <label translate="true">User Name</label>
+            </settings>
+        </column>
+
+        <!-- Is Active (with inline editing) -->
+        <column name="is_active" sortOrder="60" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <filter>select</filter>
+                <options class="Magento\Config\Model\Config\Source\Yesno" />
+                <dataType>select</dataType>
+                <sortable>true</sortable>
+                <label translate="true">Is Active</label>
+                <!-- Используем стандартный источник опций Yes/No -->
+                <editor>
+                    <editorType>select</editorType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+                </editor>
+            </settings>
+        </column>
+
+        <!-- Created At -->
+        <column name="created_at" sortOrder="70">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <sortable>true</sortable>
+                <sorting>desc</sorting>
+                <label translate="true">Created At</label>
+            </settings>
+        </column>
+
+        <!-- Telegram Updated At -->
+        <column name="telegram_updated_at" sortOrder="80">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <sortable>true</sortable>
+                <label translate="true">Telegram Updated At</label>
+            </settings>
+        </column>
+    </columns>
+</listing>

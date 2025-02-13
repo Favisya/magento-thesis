@@ -10,6 +10,7 @@
                     translate="title"
                 />
                 <resource id="Lachestry_Telegram::view_additional" title="View Additional Information" sortOrder="10" />
+                <resource id="Lachestry_Telegram::telegram_chats" title="Telegram Chats" sortOrder="10"/>
             </resource>
         </resources>
     </acl>

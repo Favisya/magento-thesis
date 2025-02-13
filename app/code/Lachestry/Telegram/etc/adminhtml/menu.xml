@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add
+            id="Lachestry_Telegram::telegram_chats"
+            title="Telegram Chats"
+            module="Lachestry_Telegram"
+            translate="title"
+            sortOrder="1000"
+            action="telegram/chat/index"
+            parent="Magento_Backend::system_tools"
+            resource="Lachestry_Telegram::telegram_chats"
+        />
+    </menu>
+</config>
