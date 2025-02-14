@@ -23,5 +23,6 @@ class NotifyAllErrors
         }
 
         $finalMessage = json_encode([$message, $context], JSON_UNESCAPED_UNICODE);
+        $this->notificationProvider->sendMessageToAllChats($finalMessage);
     }
 }

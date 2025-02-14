@@ -43,7 +43,7 @@ class TelegramChat extends AbstractDb
     {
         $allChatIds = $this->getAllChatIds();
         foreach ($ids as $key => $chatId) {
-            if (!in_array($chatId, $allChatIds)) {
+            if (!in_array($chatId[TgChInterface::CHAT_ID] ?? '', $allChatIds)) {
                 unset($ids[$key]);
             }
         }

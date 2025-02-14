@@ -32,7 +32,7 @@ class TelegramChat extends AbstractModel implements TelegramChatInterface
      */
     public function getChatId(): int
     {
-        return $this->getData(self::CHAT_ID);
+        return (int) $this->getData(self::CHAT_ID);
     }
 
     /**

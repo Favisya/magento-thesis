@@ -6,6 +6,7 @@ namespace Lachestry\Telegram\Model\Api;
 use Lachestry\Telegram\Api\NotificationInterface;
 use Lachestry\Telegram\Model\Api\Http\Client;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Lachestry\Telegram\Model\TelegramChatProvider;
 use Magento\Framework\Serialize\Serializer\Json;
 use Lachestry\Telegram\Model\Config;
 use Magento\Setup\Exception;
@@ -23,7 +24,8 @@ class TelegramProvider implements NotificationInterface
         protected readonly Client $client,
         protected readonly Json $jsonSerializer,
         protected readonly LoggerInterface $logger,
-        protected readonly Config $config
+        protected readonly Config $config,
+        protected readonly TelegramChatProvider $telegramChatProvider,
     ) {
         $this->token         = $this->config->getToken();
         $this->sendMsgMethod = $this->config->getSendMsgMethod();
@@ -31,6 +33,23 @@ class TelegramProvider implements NotificationInterface
         $this->baseUrl       = $this->config->getBaseUrl();
 
         $this->url = $this->baseUrl . $this->token . '/';
+    }
+
+    public function sendMessageToAllChats(string $msg): void
+    {
+        $chats = $this->telegramChatProvider->getActiveChats();
+
+        foreach ($chats as $chat) {
+            try {
+                $data = $this->prepareData($msg, $chat->getChatId());
+                $url = $this->prepareUrl($this->sendMsgMethod);
+                $jsonData = $this->jsonSerializer->serialize($data);
+                $this->client->request($url, 'POST', $jsonData);
+            } catch (\Exception $e) {
+                $this->logger->error($e->getMessage(), [$chat->getChatId(), $chat->getChatName()]);
+                continue;
+            }
+        }
     }
 
     public function sendMessage(string $data, int $destination): array
