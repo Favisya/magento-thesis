@@ -1,0 +1,17 @@
+{
+    "lachestry_telegram_chats": {
+        "column": {
+            "id": true,
+            "chat_id": true,
+            "chat_name": true,
+            "user_name": true,
+            "created_at": true,
+            "telegram_updated_at": true,
+            "is_active": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "LACHESTRY_TELEGRAM_CHATS_CHAT_ID": true
+        }
+    }
+}
