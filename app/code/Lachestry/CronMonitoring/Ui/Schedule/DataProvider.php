@@ -10,8 +10,8 @@ use Lachestry\CronMonitoring\Model\ResourceModel\GroupSchedule\Collection;
 use Lachestry\CronMonitoring\Model\ResourceModel\GroupSchedule\CollectionFactory;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 use Magento\Framework\UrlInterface;
-use Zend_Date;
-use Zend_Measure_Time;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 class DataProvider extends AbstractDataProvider
 {
@@ -25,6 +25,8 @@ class DataProvider extends AbstractDataProvider
     protected Config $config;
     protected array $statusMap;
     protected UrlInterface $urlHandler;
+    protected TimezoneInterface $timezone;
+    protected DateTime $dateTime;
 
     public function __construct(
         $name,
@@ -35,6 +37,8 @@ class DataProvider extends AbstractDataProvider
         Http $httpHandler,
         UrlInterface $urlHandler,
         Config $config,
+        TimezoneInterface $timezone,
+        DateTime $dateTime,
         array $statusMap = [],
         array $meta = [],
         array $data = []
@@ -52,6 +56,8 @@ class DataProvider extends AbstractDataProvider
         $this->httpHandler = $httpHandler;
         $this->collection = $collectionFactory->create();
         $this->cronGroupRepository = $cronGroupRepository;
+        $this->timezone = $timezone;
+        $this->dateTime = $dateTime;
     }
 
     public function getGroup(): string
@@ -63,7 +69,14 @@ class DataProvider extends AbstractDataProvider
     {
         $this->prepareUpdateUrl();
 
+        $group = $this->getGroup();
+        
         $collection = $this->getCollection();
+        
+        if ($group) {
+            $collection->addFieldToFilter('group', $group);
+        }
+        
         $items = $collection->toArray();
 
         foreach ($items['items'] as &$item) {
@@ -78,7 +91,12 @@ class DataProvider extends AbstractDataProvider
 
     public function getCollection(): Collection
     {
-        return $this->collection->initGroupTable($this->getGroup());
+        $group = $this->getGroup();
+        if ($group) {
+            $this->collection->initGroupTable($group);
+        }
+        
+        return $this->collection;
     }
 
     protected function prepareUpdateUrl(): self
@@ -121,14 +139,12 @@ class DataProvider extends AbstractDataProvider
             return null;
         }
 
-        $startTime   = new Zend_Date($startTime, Zend_Date::DATETIME);
-        $currentDate = new Zend_Date(null, Zend_Date::DATETIME);
+        $startDateTime = new \DateTime($startTime);
+        $currentDateTime = new \DateTime();
 
-        $difference = $currentDate->sub($startTime);
+        $interval = $currentDateTime->diff($startDateTime);
+        $differenceInMinutes = ($interval->days * 24 * 60) + ($interval->h * 60) + $interval->i;
 
-        $differenceInMinutes = new Zend_Measure_Time($difference->toValue(), Zend_Measure_Time::SECOND);
-        $differenceInMinutes->convertTo(Zend_Measure_Time::MINUTE);
-
-        return abs((int) $differenceInMinutes->getValue());
+        return $differenceInMinutes;
     }
 }
