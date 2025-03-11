@@ -9,6 +9,8 @@ use Lachestry\RabbitMQMonitor\Model\ResourceModel\ConsumerActivity as ConsumerAc
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Shell;
+use Magento\Framework\Exception\LocalizedException;
 
 class ConsumerActivityManager
 {
@@ -18,6 +20,7 @@ class ConsumerActivityManager
     protected ConsumerConfigInterface $consumerConfig;
     protected DirectoryList $directoryList;
     protected DeploymentConfig $deploymentConfig;
+    protected Shell $shell;
 
     /**
      * @param ConsumerActivityCollectionFactory $collectionFactory
@@ -26,6 +29,7 @@ class ConsumerActivityManager
      * @param ConsumerConfigInterface $consumerConfig
      * @param DirectoryList $directoryList
      * @param DeploymentConfig $deploymentConfig
+     * @param Shell $shell
      */
     public function __construct(
         ConsumerActivityCollectionFactory $collectionFactory,
@@ -33,7 +37,8 @@ class ConsumerActivityManager
         ConsumerActivityResource $consumerActivityResource,
         ConsumerConfigInterface $consumerConfig,
         DirectoryList $directoryList,
-        DeploymentConfig $deploymentConfig
+        DeploymentConfig $deploymentConfig,
+        Shell $shell
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->consumerActivityFactory = $consumerActivityFactory;
@@ -41,6 +46,7 @@ class ConsumerActivityManager
         $this->consumerConfig = $consumerConfig;
         $this->directoryList = $directoryList;
         $this->deploymentConfig = $deploymentConfig;
+        $this->shell = $shell;
     }
 
     /**
@@ -159,18 +165,29 @@ class ConsumerActivityManager
      */
     protected function checkRunningProcesses(array &$runningConsumers): void
     {
-        exec("ps aux | grep 'queue:consumers:start' | grep -v grep", $output);
-        
-        foreach ($output as $line) {
-            if (preg_match('/queue:consumers:start\s+([^\s]+)/', $line, $matches)) {
-                $consumerName = $matches[1];
+        try {
+            $command = PHP_OS === 'WINNT'
+                ? 'tasklist | findstr "queue:consumers:start"'
+                : "ps aux | grep 'queue:consumers:start' | grep -v grep";
+            
+            $output = $this->shell->execute($command);
+            
+            foreach (explode("\n", $output) as $line) {
+                if (empty($line)) {
+                    continue;
+                }
                 
-                // Получаем PID процесса
-                if (preg_match('/^\S+\s+(\d+)/', $line, $pidMatches)) {
-                    $pid = (int)$pidMatches[1];
-                    $runningConsumers[$consumerName] = $pid;
+                if (preg_match('/queue:consumers:start\s+([^\s]+)/', $line, $matches)) {
+                    $consumerName = $matches[1];
+                    
+                    if (preg_match('/^\S+\s+(\d+)/', $line, $pidMatches)) {
+                        $pid = (int)$pidMatches[1];
+                        $runningConsumers[$consumerName] = $pid;
+                    }
                 }
             }
+        } catch (LocalizedException $e) {
+            // Ошибки выполнения команды игнорируем
         }
     }
     
@@ -182,13 +199,16 @@ class ConsumerActivityManager
      */
     protected function isProcessRunning(int $pid): bool
     {
-        if (PHP_OS !== 'WINNT') {
-            exec("ps -p $pid", $output, $returnCode);
-            return $returnCode === 0;
+        try {
+            $command = PHP_OS === 'WINNT'
+                ? "tasklist /FI \"PID eq $pid\" | find \"$pid\""
+                : "ps -p $pid | grep $pid";
+                
+            $output = $this->shell->execute($command);
+            return !empty($output);
+        } catch (LocalizedException $e) {
+            return false;
         }
-        
-        exec("tasklist /FI \"PID eq $pid\"", $output);
-        return count($output) > 1;
     }
     
     /**
