@@ -1,0 +1,146 @@
+<?php
+declare(strict_types=1);
+
+namespace Lachestry\RabbitMQMonitor\Plugin;
+
+use Magento\Framework\MessageQueue\CallbackInvoker;
+use Lachestry\RabbitMQMonitor\Model\ConsumerActivityFactory;
+use Lachestry\RabbitMQMonitor\Model\ResourceModel\ConsumerActivity as ConsumerActivityResource;
+use Lachestry\RabbitMQMonitor\Model\ResourceModel\ConsumerActivity\CollectionFactory as ConsumerActivityCollectionFactory;
+
+class ConsumerActivityUpdate
+{
+    protected ConsumerActivityFactory $consumerActivityFactory;
+    protected ConsumerActivityResource $consumerActivityResource;
+    protected ConsumerActivityCollectionFactory $collectionFactory;
+
+    /**
+     * @param ConsumerActivityFactory $consumerActivityFactory
+     * @param ConsumerActivityResource $consumerActivityResource
+     * @param ConsumerActivityCollectionFactory $collectionFactory
+     */
+    public function __construct(
+        ConsumerActivityFactory $consumerActivityFactory,
+        ConsumerActivityResource $consumerActivityResource,
+        ConsumerActivityCollectionFactory $collectionFactory
+    ) {
+        $this->consumerActivityFactory = $consumerActivityFactory;
+        $this->consumerActivityResource = $consumerActivityResource;
+        $this->collectionFactory = $collectionFactory;
+    }
+
+    /**
+     * Обновляет время последней активности консьюмера при обработке сообщения
+     *
+     * @param CallbackInvoker $subject
+     * @param callable $proceed
+     * @param callable $callback
+     * @param array $arguments
+     * @return mixed
+     */
+    public function aroundExecute(
+        CallbackInvoker $subject,
+        callable $proceed,
+        callable $callback,
+        array $arguments
+    ) {
+        // Получаем имя консьюмера из трассировки стека
+        $consumerName = $this->getConsumerNameFromStackTrace();
+        
+        if ($consumerName) {
+            // Обновляем время активности консьюмера до выполнения колбэка
+            $this->updateConsumerActivity($consumerName);
+        }
+        
+        // Выполняем оригинальный метод
+        $result = $proceed($callback, $arguments);
+        
+        return $result;
+    }
+    
+    /**
+     * Извлекает имя консьюмера из трассировки стека
+     * 
+     * @return string|null
+     */
+    protected function getConsumerNameFromStackTrace(): ?string
+    {
+        $stackTrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        
+        foreach ($stackTrace as $trace) {
+            if (isset($trace['class']) && 
+                $trace['class'] === 'Magento\Framework\MessageQueue\Consumer\ConfigInterface' && 
+                isset($trace['object']) && 
+                method_exists($trace['object'], 'getName')
+            ) {
+                return $trace['object']->getName();
+            }
+            
+            // Альтернативный способ получения имени консьюмера
+            if (isset($trace['args']) && !empty($trace['args'])) {
+                foreach ($trace['args'] as $arg) {
+                    if (is_object($arg) && method_exists($arg, 'getName')) {
+                        $name = $arg->getName();
+                        if (strpos($name, ':') !== false) {
+                            return $name;
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Если не удалось получить имя консьюмера из стека, используем PID процесса
+        $pid = getmypid();
+        if ($pid) {
+            return $this->getConsumerNameByPid($pid);
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Находит имя консьюмера по PID процесса
+     * 
+     * @param int $pid
+     * @return string|null
+     */
+    protected function getConsumerNameByPid(int $pid): ?string
+    {
+        $collection = $this->collectionFactory->create();
+        $collection->addFieldToFilter('pid', $pid);
+        
+        $consumer = $collection->getFirstItem();
+        if ($consumer->getId()) {
+            return $consumer->getConsumerName();
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Обновляет время активности консьюмера
+     * 
+     * @param string $consumerName
+     * @return void
+     */
+    protected function updateConsumerActivity(string $consumerName): void
+    {
+        try {
+            $collection = $this->collectionFactory->create();
+            $collection->addFieldToFilter('consumer_name', $consumerName);
+            
+            $consumer = $collection->getFirstItem();
+            if (!$consumer->getId()) {
+                $consumer = $this->consumerActivityFactory->create();
+                $consumer->setConsumerName($consumerName);
+                $consumer->setStatus('Running');
+                $consumer->setPid(getmypid());
+            }
+            
+            $consumer->setLastActivity(date('Y-m-d H:i:s'));
+            $this->consumerActivityResource->save($consumer);
+        } catch (\Exception $e) {
+            // Ошибки логирования здесь могут повлиять на основную функциональность консьюмера
+        }
+    }
+}

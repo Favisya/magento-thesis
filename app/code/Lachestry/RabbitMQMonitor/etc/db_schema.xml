@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="rabbitmq_consumer_activity" resource="default" engine="innodb" comment="RabbitMQ Consumer Activity">
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="varchar" name="consumer_name" nullable="false" length="255" comment="Consumer Name"/>
+        <column xsi:type="int" name="pid" unsigned="true" nullable="true" comment="Process ID"/>
+        <column xsi:type="timestamp" name="last_activity" nullable="false" default="CURRENT_TIMESTAMP" on_update="true" comment="Last Activity Time"/>
+        <column xsi:type="varchar" name="status" nullable="false" length="50" default="Stopped" comment="Consumer Status"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="RABBITMQ_CONSUMER_ACTIVITY_CONSUMER_NAME">
+            <column name="consumer_name"/>
+        </constraint>
+        <index referenceId="RABBITMQ_CONSUMER_ACTIVITY_STATUS" indexType="btree">
+            <column name="status"/>
+        </index>
+    </table>
+</schema> 

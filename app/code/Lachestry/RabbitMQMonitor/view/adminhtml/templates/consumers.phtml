@@ -1,0 +1,64 @@
+<?php
+/** @var \Lachestry\RabbitMQMonitor\Block\Adminhtml\Consumers $block */
+?>
+<div class="admin__data-grid-header">
+    <div class="admin__data-grid-header-row">
+        <div class="admin__data-grid-actions-wrap">
+            <div class="page-actions">
+                <div class="page-actions-buttons">
+                    <button id="refresh-status" class="action-default scalable" type="button">
+                        <span><?= $block->escapeHtml(__('Refresh Status')) ?></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="admin__data-grid-wrap">
+    <table class="data-grid">
+        <thead>
+            <tr>
+                <th class="data-grid-th"><?= $block->escapeHtml(__('Consumer Name')) ?></th>
+                <th class="data-grid-th"><?= $block->escapeHtml(__('Connection')) ?></th>
+                <th class="data-grid-th"><?= $block->escapeHtml(__('Queue')) ?></th>
+                <th class="data-grid-th"><?= $block->escapeHtml(__('Topic')) ?></th>
+                <th class="data-grid-th"><?= $block->escapeHtml(__('Status')) ?></th>
+                <th class="data-grid-th"><?= $block->escapeHtml(__('PID')) ?></th>
+                <th class="data-grid-th"><?= $block->escapeHtml(__('Last Activity')) ?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($block->getConsumers() as $consumer): ?>
+                <tr>
+                    <td><?= $block->escapeHtml($consumer['name']) ?></td>
+                    <td><?= $block->escapeHtml($consumer['connection']) ?></td>
+                    <td><?= $block->escapeHtml($consumer['queue']) ?></td>
+                    <td><?= $block->escapeHtml($consumer['topic']) ?></td>
+                    <td>
+                        <?php
+                        $severityClass = 'critical';
+                        if ($consumer['status'] === 'Running') {
+                            $severityClass = 'notice';
+                        } elseif ($consumer['status'] === 'Disabled') {
+                            $severityClass = 'minor';
+                        }
+                        ?>
+                        <span class="grid-severity-<?= $severityClass ?>">
+                            <span><?= $block->escapeHtml($consumer['status']) ?></span>
+                        </span>
+                    </td>
+                    <td><?= $block->escapeHtml($consumer['pid'] ?? '-') ?></td>
+                    <td><?= $block->escapeHtml($consumer['last_activity'] ?? '-') ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    require(['jquery'], function($) {
+        $('#refresh-status').on('click', function() {
+            location.reload();
+        });
+    });
+</script> 

@@ -332,6 +332,7 @@ return [
         'Lachestry_Cron' => 1,
         'Lachestry_CronMonitoring' => 1,
         'Lachestry_Telegram' => 1,
+        'Lachestry_RabbitMQMonitor' => 1,
         'Lachestry_Notifier' => 1,
         'PayPal_Braintree' => 1,
         'PayPal_BraintreeGraphQl' => 1,
