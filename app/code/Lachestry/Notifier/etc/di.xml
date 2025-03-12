@@ -1,10 +1,50 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Psr\Log\LoggerInterface">
+    <type name="Magento\Indexer\Model\Processor">
         <plugin
-            name="Lachestry_Notifier::NotifyAllErrors"
-            type="Lachestry\Notifier\Plugin\NotifyAllErrors"
+            name="Lachestry_Notifier::NotifyProcessorErrors"
+            type="Lachestry\Notifier\Plugin\Indexer\NotifyProcessorErrors"
+            sortOrder="10"
+        />
+    </type>
+
+    <type name="Magento\Indexer\Model\Indexer">
+        <plugin
+            name="Lachestry_Notifier::NotifyIndexerErrors"
+            type="Lachestry\Notifier\Plugin\Indexer\NotifyIndexerErrors"
+            sortOrder="10"
+        />
+    </type>
+
+    <type name="Magento\Cron\Observer\ProcessCronQueueObserver">
+        <plugin
+            name="Lachestry_Notifier::NotifyObserverErrors"
+            type="Lachestry\Notifier\Plugin\Cron\NotifyObserverErrors"
+            sortOrder="20"
+        />
+    </type>
+
+    <type name="Magento\Cron\Model\Schedule">
+        <plugin
+            name="Lachestry_Notifier::NotifyScheduleErrors"
+            type="Lachestry\Notifier\Plugin\Cron\NotifyScheduleErrors"
+            sortOrder="20"
+        />
+    </type>
+
+    <type name="Magento\Framework\MessageQueue\ConsumerInterface">
+        <plugin
+            name="Lachestry_Notifier::NotifyQueueErrors"
+            type="Lachestry\Notifier\Plugin\Queue\NotifyQueueErrors"
+            sortOrder="10"
+        />
+    </type>
+
+    <type name="Magento\Framework\Webapi\ErrorProcessor">
+        <plugin
+            name="Lachestry_Notifier::NotifyApiErrors"
+            type="Lachestry\Notifier\Plugin\Api\NotifyApiErrors"
             sortOrder="10"
         />
     </type>

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <lachestry_notifier>
+            <general>
+                <enabled>1</enabled>
+            </general>
+            <events>
+                <notify_indexer>1</notify_indexer>
+                <notify_cron>1</notify_cron>
+                <notify_queue>1</notify_queue>
+                <notify_api>1</notify_api>
+            </events>
+        </lachestry_notifier>
+    </default>
+</config> 

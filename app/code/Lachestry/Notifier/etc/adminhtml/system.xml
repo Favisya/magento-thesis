@@ -1,26 +1,49 @@
 <?xml version="1.0"?>
-<config
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd"
->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <section id="telegram_notfier" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-            <class>separator-top</class>
-            <label>Telegram Notifier</label>
+        <tab id="lachestry" translate="label" sortOrder="400">
+            <label>Lachestry</label>
+        </tab>
+        <section id="lachestry_notifier" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Error Notifier</label>
             <tab>lachestry</tab>
-            <resource>Lachestry_Telegram::telegram</resource>
+            <resource>Lachestry_Notifier::config</resource>
             <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                <field id="is_enabled" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Is Telegram Notifier Enabled</label>
+                <label>General Settings</label>
+                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Error Notifications</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-
-                <field id="is_all_error_enabled" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Log Absolutely All Errors?</label>
-                    <depends>
-                        <field id="is_enabled">1</field>
-                    </depends>
+            </group>
+            <group id="events" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Notification Events</label>
+                <field id="notify_indexer" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Notify on Indexer Errors</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="lachestry_notifier/general/enabled">1</field>
+                    </depends>
+                </field>
+                <field id="notify_cron" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Notify on Cron Errors</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="lachestry_notifier/general/enabled">1</field>
+                    </depends>
+                </field>
+                <field id="notify_queue" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Notify on Message Queue Errors</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="lachestry_notifier/general/enabled">1</field>
+                    </depends>
+                </field>
+                <field id="notify_api" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Notify on API Errors</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="lachestry_notifier/general/enabled">1</field>
+                    </depends>
                 </field>
             </group>
         </section>
