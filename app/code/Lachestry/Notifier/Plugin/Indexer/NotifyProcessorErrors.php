@@ -7,6 +7,9 @@ use Magento\Indexer\Model\Processor;
 use Lachestry\Notifier\Model\ErrorHandler;
 use Lachestry\Notifier\Model\Config;
 
+/**
+ * Plugin to catch and notify about indexer processor errors
+ */
 class NotifyProcessorErrors
 {
     /**
@@ -16,14 +19,15 @@ class NotifyProcessorErrors
     public function __construct(
         protected readonly ErrorHandler $errorHandler,
         protected readonly Config $config
-    ) {}
+    ) {
+    }
 
     /**
-     * Intercept indexer reindexAll execution and send notification on error
+     * Intercept reindexAll execution and send notification on error
      *
      * @param Processor $subject
      * @param callable $proceed
-     * @return void
+     * @return mixed
      */
     public function aroundReindexAll(
         Processor $subject,
@@ -37,7 +41,7 @@ class NotifyProcessorErrors
             return $proceed();
         } catch (\Throwable $e) {
             $this->errorHandler->handleError($e, 'indexer', [
-                'action' => 'reindexAll',
+                'action'  => 'reindexAll',
                 'indexer' => 'all'
             ]);
             
@@ -46,11 +50,11 @@ class NotifyProcessorErrors
     }
 
     /**
-     * Intercept indexer reindexAllInvalid execution and send notification on error
+     * Intercept reindexAllInvalid execution and send notification on error
      *
      * @param Processor $subject
      * @param callable $proceed
-     * @return void
+     * @return mixed
      */
     public function aroundReindexAllInvalid(
         Processor $subject,
@@ -64,7 +68,7 @@ class NotifyProcessorErrors
             return $proceed();
         } catch (\Throwable $e) {
             $this->errorHandler->handleError($e, 'indexer', [
-                'action' => 'reindexAllInvalid',
+                'action'  => 'reindexAllInvalid',
                 'indexer' => 'invalid'
             ]);
             

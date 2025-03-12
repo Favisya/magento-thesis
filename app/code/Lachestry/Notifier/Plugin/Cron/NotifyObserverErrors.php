@@ -8,6 +8,9 @@ use Magento\Framework\Event\Observer;
 use Lachestry\Notifier\Model\ErrorHandler;
 use Lachestry\Notifier\Model\Config;
 
+/**
+ * Plugin to catch and notify about cron queue observer errors
+ */
 class NotifyObserverErrors
 {
     /**
@@ -17,7 +20,8 @@ class NotifyObserverErrors
     public function __construct(
         protected readonly ErrorHandler $errorHandler,
         protected readonly Config $config
-    ) {}
+    ) {
+    }
 
     /**
      * Intercept cron job execution to catch errors
@@ -42,7 +46,7 @@ class NotifyObserverErrors
             try {
                 $this->errorHandler->handleError($exception, 'cron', [
                     'observer' => get_class($observer),
-                    'action' => 'execute'
+                    'action'   => 'execute'
                 ]);
             } catch (\Throwable $e) {
                 // Do nothing to avoid interrupting the main process

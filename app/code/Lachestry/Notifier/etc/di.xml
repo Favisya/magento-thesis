@@ -48,4 +48,16 @@
             sortOrder="10"
         />
     </type>
+    
+    <!-- MessageFormatter configuration -->
+    <type name="Lachestry\Notifier\Model\MessageFormatter">
+        <arguments>
+            <argument name="formatters" xsi:type="array">
+                <item name="indexer" xsi:type="object">Lachestry\Notifier\Model\Formatter\IndexerFormatter</item>
+                <item name="cron" xsi:type="object">Lachestry\Notifier\Model\Formatter\CronFormatter</item>
+                <item name="message_queue" xsi:type="object">Lachestry\Notifier\Model\Formatter\QueueFormatter</item>
+                <item name="rest_api" xsi:type="object">Lachestry\Notifier\Model\Formatter\ApiFormatter</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

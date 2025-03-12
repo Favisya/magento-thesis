@@ -7,6 +7,9 @@ use Magento\Cron\Model\Schedule;
 use Lachestry\Notifier\Model\ErrorHandler;
 use Lachestry\Notifier\Model\Config;
 
+/**
+ * Plugin to catch and notify about cron schedule errors
+ */
 class NotifyScheduleErrors
 {
     /**
@@ -16,7 +19,8 @@ class NotifyScheduleErrors
     public function __construct(
         protected readonly ErrorHandler $errorHandler,
         protected readonly Config $config
-    ) {}
+    ) {
+    }
 
     /**
      * Track errors when schedule is being processed
@@ -41,9 +45,9 @@ class NotifyScheduleErrors
                 
                 $exception = new \Exception($message);
                 $this->errorHandler->handleError($exception, 'cron', [
-                    'job_code' => $jobCode,
+                    'job_code'     => $jobCode,
                     'scheduled_at' => $scheduledAt,
-                    'status' => $status
+                    'status'       => $status
                 ]);
             } catch (\Throwable $e) {
                 // Do nothing to avoid interrupting the main process

@@ -7,6 +7,9 @@ use Magento\Indexer\Model\Indexer;
 use Lachestry\Notifier\Model\ErrorHandler;
 use Lachestry\Notifier\Model\Config;
 
+/**
+ * Plugin to catch and notify about indexer errors
+ */
 class NotifyIndexerErrors
 {
     /**
@@ -16,7 +19,8 @@ class NotifyIndexerErrors
     public function __construct(
         protected readonly ErrorHandler $errorHandler,
         protected readonly Config $config
-    ) {}
+    ) {
+    }
 
     /**
      * Intercept individual indexer execution and send notification on error
@@ -40,21 +44,21 @@ class NotifyIndexerErrors
             $indexerId = $subject->getId();
 
             $this->errorHandler->handleError($e, 'indexer', [
-                'action' => 'reindex',
+                'action'  => 'reindex',
                 'indexer' => $indexerId,
-                'title' => $indexerTitle
+                'title'   => $indexerTitle
             ]);
 
             throw $e;
         }
     }
 
-
     /**
-     * Intercept individual indexer execution and send notification on error
+     * Process reindexing of specified entities
      *
      * @param Indexer $subject
      * @param callable $proceed
+     * @param array $ids
      * @return mixed
      */
     public function aroundReindexList(
@@ -73,21 +77,21 @@ class NotifyIndexerErrors
             $indexerId = $subject->getId();
 
             $this->errorHandler->handleError($e, 'indexer', [
-                'action' => 'reindex',
+                'action'  => 'reindex',
                 'indexer' => $indexerId,
-                'title' => $indexerTitle
+                'title'   => $indexerTitle
             ]);
 
             throw $e;
         }
     }
 
-
     /**
-     * Intercept individual indexer execution and send notification on error
+     * Process reindexing of a single row
      *
      * @param Indexer $subject
      * @param callable $proceed
+     * @param mixed $id
      * @return mixed
      */
     public function aroundReindexRow(
@@ -106,9 +110,9 @@ class NotifyIndexerErrors
             $indexerId = $subject->getId();
 
             $this->errorHandler->handleError($e, 'indexer', [
-                'action' => 'reindex',
+                'action'  => 'reindex',
                 'indexer' => $indexerId,
-                'title' => $indexerTitle
+                'title'   => $indexerTitle
             ]);
 
             throw $e;

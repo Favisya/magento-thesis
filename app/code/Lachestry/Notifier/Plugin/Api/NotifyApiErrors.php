@@ -8,6 +8,9 @@ use Lachestry\Notifier\Model\Config;
 use Magento\Framework\Webapi\ErrorProcessor;
 use Magento\Framework\Webapi\Exception as WebapiException;
 
+/**
+ * Plugin to catch and notify about API errors
+ */
 class NotifyApiErrors
 {
     /**
@@ -17,7 +20,8 @@ class NotifyApiErrors
     public function __construct(
         protected readonly ErrorHandler $errorHandler,
         protected readonly Config $config
-    ) {}
+    ) {
+    }
 
     /**
      * Intercept REST API error processing
@@ -42,8 +46,8 @@ class NotifyApiErrors
             }
             
             $isClientError = $exception instanceof WebapiException && 
-                             ($exception->getHttpCode() >= 400 && $exception->getHttpCode() < 500);
-                             
+                            ($exception->getHttpCode() >= 400 && $exception->getHttpCode() < 500);
+                            
             if (!$isClientError) {
                 $this->errorHandler->handleError($exception, 'rest_api', $additionalData);
             }

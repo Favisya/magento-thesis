@@ -8,6 +8,9 @@ use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Lachestry\Notifier\Model\ErrorHandler;
 use Lachestry\Notifier\Model\Config;
 
+/**
+ * Plugin to catch and notify about message queue errors
+ */
 class NotifyQueueErrors
 {
     /**
@@ -17,7 +20,8 @@ class NotifyQueueErrors
     public function __construct(
         protected readonly ErrorHandler $errorHandler,
         protected readonly Config $config
-    ) {}
+    ) {
+    }
 
     /**
      * Intercept message queue processing to catch errors
@@ -44,7 +48,7 @@ class NotifyQueueErrors
             $messageId = $envelope->getMessageId();
             
             $this->errorHandler->handleError($e, 'message_queue', [
-                'topic' => $topic,
+                'topic'      => $topic,
                 'message_id' => $messageId
             ]);
             
