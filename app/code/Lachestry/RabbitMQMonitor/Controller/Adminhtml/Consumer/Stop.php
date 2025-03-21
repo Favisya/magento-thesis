@@ -72,7 +72,6 @@ class Stop extends Action
             
             $this->shell->execute($command);
             
-            // Проверяем, остановлен ли процесс
             return !$this->isProcessRunning($pid);
         } catch (\Exception $e) {
             return false;

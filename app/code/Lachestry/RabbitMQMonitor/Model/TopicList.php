@@ -15,12 +15,6 @@ class TopicList
     protected DeploymentConfig $deploymentConfig;
     protected ConsumerConfigInterface $consumerConfig;
 
-    /**
-     * @param TopologyConfigInterface $topologyConfig
-     * @param ResourceConnection $resourceConnection
-     * @param DeploymentConfig $deploymentConfig
-     * @param ConsumerConfigInterface $consumerConfig
-     */
     public function __construct(
         TopologyConfigInterface $topologyConfig,
         ResourceConnection $resourceConnection,
@@ -33,17 +27,11 @@ class TopicList
         $this->consumerConfig = $consumerConfig;
     }
 
-    /**
-     * Get all available topics from multiple sources
-     *
-     * @return array
-     */
     public function getTopics(): array
     {
         $topics = [];
         
         try {
-            // Get topics from topology configuration
             $topologyConfigData = $this->topologyConfig->getExchanges();
             foreach ($topologyConfigData as $exchange) {
                 $exchangeName = $exchange->getName();
@@ -52,11 +40,9 @@ class TopicList
                 }
             }
         } catch (\Exception $e) {
-            // Silence exceptions
         }
         
         try {
-            // Get topics from database
             $connection = $this->resourceConnection->getConnection();
             $tableNames = $connection->listTables();
             if (in_array($this->resourceConnection->getTableName('queue_topic'), $tableNames)) {
@@ -70,11 +56,9 @@ class TopicList
                 }
             }
         } catch (\Exception $e) {
-            // Silence exceptions
         }
         
         try {
-            // Get topics from deployment configuration
             $queueConfig = $this->deploymentConfig->get('queue');
             if (is_array($queueConfig) && isset($queueConfig['topics']) && is_array($queueConfig['topics'])) {
                 foreach (array_keys($queueConfig['topics']) as $topic) {
@@ -84,11 +68,9 @@ class TopicList
                 }
             }
         } catch (\Exception $e) {
-            // Silence exceptions
         }
         
         try {
-            // Get topics from consumer configuration
             $consumers = $this->consumerConfig->getConsumers();
             
             foreach ($consumers as $consumer) {
@@ -98,11 +80,9 @@ class TopicList
                 }
             }
         } catch (\Exception $e) {
-            // Silence exceptions
         }
         
         try {
-            // Check consumers from cron configuration
             $cronConsumers = $this->deploymentConfig->get('cron_consumers_runner/consumers');
             
             if (is_array($cronConsumers)) {
@@ -113,24 +93,17 @@ class TopicList
                 }
             }
         } catch (\Exception $e) {
-            // Silence exceptions
         }
         
         sort($topics);
         return $topics;
     }
 
-    /**
-     * Get mapping between consumers and topics
-     *
-     * @return array
-     */
     public function getConsumerTopicMap(): array
     {
         $result = [];
         
         try {
-            // Get consumer-topic map from database
             $connection = $this->resourceConnection->getConnection();
             $tableNames = $connection->listTables();
             
@@ -164,11 +137,9 @@ class TopicList
                 }
             }
         } catch (\Exception $e) {
-            // Silence exceptions
         }
         
         try {
-            // Get consumer-topic map from deployment configuration
             $queueConfig = $this->deploymentConfig->get('queue');
             
             if (is_array($queueConfig) && isset($queueConfig['topics']) && is_array($queueConfig['topics'])) {
@@ -179,11 +150,9 @@ class TopicList
                 }
             }
         } catch (\Exception $e) {
-            // Silence exceptions
         }
         
         try {
-            // Get consumer-topic map from consumer configuration
             $consumers = $this->consumerConfig->getConsumers();
             
             foreach ($consumers as $consumer) {
@@ -195,22 +164,15 @@ class TopicList
                 }
             }
         } catch (\Exception $e) {
-            // Silence exceptions
         }
         
         ksort($result);
         return $result;
     }
 
-    /**
-     * Get topic for a specific consumer
-     *
-     * @param string $consumerName
-     * @return string|null
-     */
     public function getTopicForConsumer(string $consumerName): ?string
     {
         $map = $this->getConsumerTopicMap();
         return $map[$consumerName] ?? null;
     }
-} 
+}

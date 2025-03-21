@@ -14,11 +14,6 @@ class ConsumerActivityUpdate
     protected ConsumerActivityResource $consumerActivityResource;
     protected ConsumerActivityCollectionFactory $collectionFactory;
 
-    /**
-     * @param ConsumerActivityFactory $consumerActivityFactory
-     * @param ConsumerActivityResource $consumerActivityResource
-     * @param ConsumerActivityCollectionFactory $collectionFactory
-     */
     public function __construct(
         ConsumerActivityFactory $consumerActivityFactory,
         ConsumerActivityResource $consumerActivityResource,
@@ -29,40 +24,23 @@ class ConsumerActivityUpdate
         $this->collectionFactory = $collectionFactory;
     }
 
-    /**
-     * Обновляет время последней активности консьюмера при обработке сообщения
-     *
-     * @param CallbackInvoker $subject
-     * @param callable $proceed
-     * @param callable $callback
-     * @param array $arguments
-     * @return mixed
-     */
     public function aroundExecute(
         CallbackInvoker $subject,
         callable $proceed,
         callable $callback,
         array $arguments
     ) {
-        // Получаем имя консьюмера из трассировки стека
         $consumerName = $this->getConsumerNameFromStackTrace();
         
         if ($consumerName) {
-            // Обновляем время активности консьюмера до выполнения колбэка
             $this->updateConsumerActivity($consumerName);
         }
         
-        // Выполняем оригинальный метод
         $result = $proceed($callback, $arguments);
         
         return $result;
     }
     
-    /**
-     * Извлекает имя консьюмера из трассировки стека
-     * 
-     * @return string|null
-     */
     protected function getConsumerNameFromStackTrace(): ?string
     {
         $stackTrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
@@ -76,7 +54,6 @@ class ConsumerActivityUpdate
                 return $trace['object']->getName();
             }
             
-            // Альтернативный способ получения имени консьюмера
             if (isset($trace['args']) && !empty($trace['args'])) {
                 foreach ($trace['args'] as $arg) {
                     if (is_object($arg) && method_exists($arg, 'getName')) {
@@ -89,7 +66,6 @@ class ConsumerActivityUpdate
             }
         }
         
-        // Если не удалось получить имя консьюмера из стека, используем PID процесса
         $pid = getmypid();
         if ($pid) {
             return $this->getConsumerNameByPid($pid);
@@ -98,12 +74,6 @@ class ConsumerActivityUpdate
         return null;
     }
     
-    /**
-     * Находит имя консьюмера по PID процесса
-     * 
-     * @param int $pid
-     * @return string|null
-     */
     protected function getConsumerNameByPid(int $pid): ?string
     {
         $collection = $this->collectionFactory->create();
@@ -117,12 +87,6 @@ class ConsumerActivityUpdate
         return null;
     }
     
-    /**
-     * Обновляет время активности консьюмера
-     * 
-     * @param string $consumerName
-     * @return void
-     */
     protected function updateConsumerActivity(string $consumerName): void
     {
         try {
@@ -140,7 +104,6 @@ class ConsumerActivityUpdate
             $consumer->setLastActivity(date('Y-m-d H:i:s'));
             $this->consumerActivityResource->save($consumer);
         } catch (\Exception $e) {
-            // Ошибки логирования здесь могут повлиять на основную функциональность консьюмера
         }
     }
 }
