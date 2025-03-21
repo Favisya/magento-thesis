@@ -8,20 +8,9 @@ use Psr\Log\LoggerInterface;
 
 class UpdateConsumerStatus
 {
-    /**
-     * @var ConsumerActivityManager
-     */
     private $consumerActivityManager;
-
-    /**
-     * @var LoggerInterface
-     */
     private $logger;
 
-    /**
-     * @param ConsumerActivityManager $consumerActivityManager
-     * @param LoggerInterface $logger
-     */
     public function __construct(
         ConsumerActivityManager $consumerActivityManager,
         LoggerInterface $logger
@@ -30,11 +19,6 @@ class UpdateConsumerStatus
         $this->logger = $logger;
     }
 
-    /**
-     * Выполняет обновление статусов консьюмеров
-     * 
-     * @return void
-     */
     public function execute(): void
     {
         try {

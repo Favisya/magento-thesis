@@ -22,16 +22,6 @@ class Consumers extends Template
     protected ConsumerActivityManager $consumerActivityManager;
     protected TopicList $topicList;
 
-    /**
-     * @param Template\Context $context
-     * @param ConsumerConfigInterface $consumerConfig
-     * @param DeploymentConfig $deploymentConfig
-     * @param ConsumersRunner $consumersRunner
-     * @param DirectoryList $directoryList
-     * @param ConsumerActivityManager $consumerActivityManager
-     * @param TopicList $topicList
-     * @param array $data
-     */
     public function __construct(
         Template\Context $context,
         ConsumerConfigInterface $consumerConfig,
@@ -51,11 +41,6 @@ class Consumers extends Template
         parent::__construct($context, $data);
     }
 
-    /**
-     * Get list of all consumers with their status
-     *
-     * @return array
-     */
     public function getConsumers(): array
     {
         $result = [];
@@ -90,7 +75,6 @@ class Consumers extends Template
             $result[] = $consumerData;
         }
         
-        // Sort by name
         usort($result, function($a, $b) {
             return strcmp($a['name'], $b['name']);
         });
@@ -98,14 +82,6 @@ class Consumers extends Template
         return $result;
     }
     
-    /**
-     * Определяет статус консьюмера на основе различных факторов
-     * 
-     * @param string $consumerName
-     * @param bool $isRunning
-     * @param bool $isAllowed
-     * @return string
-     */
     protected function determineConsumerStatus(
         string $consumerName, 
         bool $isRunning,
@@ -122,11 +98,6 @@ class Consumers extends Template
         return 'Stopped';
     }
     
-    /**
-     * Получает список разрешенных консьюмеров из конфигурации
-     * 
-     * @return array
-     */
     protected function getAllowedConsumers(): array
     {
         $queueConfig = $this->deploymentConfig->get('queue');
@@ -150,12 +121,6 @@ class Consumers extends Template
         return [];
     }
     
-    /**
-     * Форматирует дату в удобочитаемом формате
-     * 
-     * @param string|null $dateTime
-     * @return string
-     */
     protected function formatCustomDate($dateTime): string
     {
         if (!$dateTime) {
@@ -165,4 +130,4 @@ class Consumers extends Template
         $date = new \DateTime($dateTime);
         return $date->format('Y-m-d H:i:s');
     }
-} 
+}

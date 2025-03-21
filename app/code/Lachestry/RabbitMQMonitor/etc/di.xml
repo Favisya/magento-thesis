@@ -12,4 +12,13 @@
     <type name="Magento\Framework\MessageQueue\CallbackInvoker">
         <plugin name="lachestry_rabbitmqmonitor_consumer_activity_update" type="Lachestry\RabbitMQMonitor\Plugin\ConsumerActivityUpdate" sortOrder="10" />
     </type>
+    
+    <!-- Настройка провайдера данных для UI компонента -->
+    <type name="Lachestry\RabbitMQMonitor\Ui\DataProvider\ConsumersDataProvider">
+        <arguments>
+            <argument name="name" xsi:type="string">rabbitmq_consumers_listing_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+        </arguments>
+    </type>
 </config> 

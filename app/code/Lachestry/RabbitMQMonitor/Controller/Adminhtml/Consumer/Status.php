@@ -12,9 +12,8 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Shell;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Console\Cli;
 
-class Start extends Action
+class Status extends Action
 {
     protected JsonFactory $resultJsonFactory;
     protected ScopeConfigInterface $scopeConfig;
@@ -52,57 +51,61 @@ class Start extends Action
                 throw new LocalizedException(__('Consumer ID is required'));
             }
             
-            $maxMessages = (int)$this->scopeConfig->getValue('rabbitmq_monitor/general/max_messages') ?: 10000;
-            $waitTimeoutSec = 1;
-            
-            $queueConfig = $this->deploymentConfig->get('queue');
-            $consumersWaitForMessages = null;
-            
-            if (is_array($queueConfig) && isset($queueConfig['consumers_wait_for_messages'])) {
-                if (is_array($queueConfig['consumers_wait_for_messages']) && 
-                    isset($queueConfig['consumers_wait_for_messages'][$consumerId])) {
-                    $consumersWaitForMessages = $queueConfig['consumers_wait_for_messages'][$consumerId];
-                } else if (!is_array($queueConfig['consumers_wait_for_messages'])) {
-                    $consumersWaitForMessages = $queueConfig['consumers_wait_for_messages'];
-                }
-            }
-            
-            if ($consumersWaitForMessages !== null) {
-                $waitTimeoutSec = $consumersWaitForMessages ? 1 : 0;
-            }
-            
             $rootDir = $this->getRootDir();
             
             if (!$rootDir) {
                 throw new LocalizedException(__('Could not determine Magento root directory'));
             }
             
-            $phpPath = 'php';
+            $pidFile = $rootDir . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'queue' . DIRECTORY_SEPARATOR . $consumerId . '.pid';
             
-            $command = $phpPath . ' ' . $rootDir . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'magento ' 
-                . 'queue:consumers:start ' . escapeshellarg($consumerId) . ' '
-                . '--max-messages=' . $maxMessages . ' '
-                . '--pid-file-path=' . escapeshellarg($rootDir . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'queue')
-                . ($waitTimeoutSec !== null ? ' --wait-for-messages=' . $waitTimeoutSec : '');
-                
+            if (!$this->file->isExists($pidFile)) {
+                return $resultJson->setData([
+                    'success' => true,
+                    'status' => 'stopped',
+                    'message' => __('Consumer "%1" is not running', $consumerId)
+                ]);
+            }
+            
+            $pid = (int)$this->file->fileGetContents($pidFile);
+            
+            if (!$pid) {
+                return $resultJson->setData([
+                    'success' => true,
+                    'status' => 'stopped',
+                    'message' => __('Consumer "%1" is not running', $consumerId)
+                ]);
+            }
+            
             if (PHP_OS !== 'WINNT') {
-                $command .= ' > /dev/null 2>&1 & echo $!';
+                $command = 'ps -p ' . $pid . ' -o comm=';
                 $output = $this->shell->execute($command);
-                $pid = (int)trim($output);
                 
-                if (!$pid) {
-                    throw new LocalizedException(__('Could not start consumer process'));
+                if (empty($output)) {
+                    return $resultJson->setData([
+                        'success' => true,
+                        'status' => 'stopped',
+                        'message' => __('Consumer "%1" is not running', $consumerId)
+                    ]);
                 }
             } else {
-                $command = 'start /B "Magento Consumer ' . $consumerId . '" ' . $command;
-                $this->shell->execute($command);
-                $pid = 0;
+                $command = 'tasklist /FI "PID eq ' . $pid . '" /FO CSV /NH';
+                $output = $this->shell->execute($command);
+                
+                if (empty($output)) {
+                    return $resultJson->setData([
+                        'success' => true,
+                        'status' => 'stopped',
+                        'message' => __('Consumer "%1" is not running', $consumerId)
+                    ]);
+                }
             }
             
             return $resultJson->setData([
                 'success' => true,
-                'message' => __('Consumer "%1" started successfully', $consumerId),
-                'pid' => $pid
+                'status' => 'running',
+                'pid' => $pid,
+                'message' => __('Consumer "%1" is running with PID %2', $consumerId, $pid)
             ]);
         } catch (\Exception $e) {
             return $resultJson->setData([

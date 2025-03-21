@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">rabbitmq_consumers_listing.rabbitmq_consumers_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="refresh">
+                <url path="*/*/index"/>
+                <class>primary</class>
+                <label translate="true">Refresh Status</label>
+            </button>
+        </buttons>
+        <spinner>rabbitmq_consumers_columns</spinner>
+        <deps>
+            <dep>rabbitmq_consumers_listing.rabbitmq_consumers_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="rabbitmq_consumers_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Lachestry_RabbitMQMonitor::consumers</aclResource>
+        <dataProvider class="Lachestry\RabbitMQMonitor\Ui\DataProvider\ConsumersDataProvider" name="rabbitmq_consumers_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <columns name="rabbitmq_consumers_columns">
+        <column name="name">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Consumer Name</label>
+                <sorting>asc</sorting>
+            </settings>
+        </column>
+        <column name="connection">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Connection</label>
+            </settings>
+        </column>
+        <column name="queue">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Queue</label>
+            </settings>
+        </column>
+        <column name="topic">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Topic</label>
+            </settings>
+        </column>
+        <column name="status" class="Lachestry\RabbitMQMonitor\Ui\Component\Listing\Column\ConsumerStatus">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Status</item>
+                </item>
+            </argument>
+        </column>
+        <column name="pid">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">PID</label>
+            </settings>
+        </column>
+        <column name="last_activity">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Last Activity</label>
+            </settings>
+        </column>
+    </columns>
+</listing>
