@@ -11,6 +11,7 @@
                 <notify_cron>1</notify_cron>
                 <notify_queue>1</notify_queue>
                 <notify_api>1</notify_api>
+                <notify_stuck_cron>1</notify_stuck_cron>
             </events>
         </lachestry_notifier>
     </default>

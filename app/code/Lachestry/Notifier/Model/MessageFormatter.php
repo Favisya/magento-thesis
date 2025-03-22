@@ -15,7 +15,7 @@ class MessageFormatter
      * @var array<string, SourceFormatterInterface>
      */
     private array $formatters = [];
-    
+
     /**
      * @var SourceFormatterInterface
      */
@@ -27,12 +27,12 @@ class MessageFormatter
      */
     public function __construct(
         DefaultFormatter $defaultFormatter,
-        array $formatters = []
+        array            $formatters = [],
     ) {
         $this->defaultFormatter = $defaultFormatter;
-        $this->formatters = $formatters;
+        $this->formatters       = $formatters;
     }
-    
+
     /**
      * Add a formatter for a specific source
      *
@@ -45,7 +45,7 @@ class MessageFormatter
         $this->formatters[$source] = $formatter;
         return $this;
     }
-    
+
     /**
      * Format error message for Telegram
      *
@@ -56,28 +56,28 @@ class MessageFormatter
      */
     public function formatTelegramMessage(
         \Throwable $exception,
-        string $source,
-        array $additionalData = []
+        string     $source,
+        array      $additionalData = [],
     ): string {
         $formatter = $this->formatters[$source] ?? $this->defaultFormatter;
-        $title = $formatter->getTitle();
-        
+        $title     = $formatter->getTitle();
+
         $message = "🔴 $title\n";
         $message .= "⏰ " . date('Y-m-d H:i:s') . "\n";
         $message .= "🔍 Source: $source\n";
-        
+
         // Add source-specific information
         $message .= $formatter->format($additionalData);
-        
+
         // Add exception details
         $message .= "❗ Error: " . $exception->getMessage() . "\n";
         $message .= "⚠️ File: " . $exception->getFile() . " (line " . $exception->getLine() . ")\n";
-        
+
         // Add stack trace
-        $trace = explode("\n", $exception->getTraceAsString());
+        $trace      = explode("\n", $exception->getTraceAsString());
         $traceShort = array_slice($trace, 0, 3);
-        $message .= "🔍 Stack trace:\n```" . implode("\n", $traceShort) . "```\n";
-        
+        $message    .= "🔍 Stack trace:\n```" . implode("\n", $traceShort) . "```\n";
+
         return $message;
     }
-} 
+}

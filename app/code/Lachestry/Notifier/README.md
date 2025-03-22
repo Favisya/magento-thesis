@@ -2,11 +2,32 @@
 
 The Notifier module is designed to monitor and notify about errors in various Magento 2 system processes, including:
 
-- Logger errors
 - Indexer errors
 - Cron job errors
-- Message queue errors
+- Message Queue errors
 - REST API errors
+- Stuck cron jobs
+
+## Features
+
+- Configurable notification system
+- Integration with Telegram for immediate alerts
+- Detailed error messages with contextual information
+- Monitoring of stuck cron jobs based on configurable thresholds
+
+## Configuration
+
+1. Go to **Stores > Configuration > Lachestry > Error Notifier**
+2. Enable the module and configure which types of notifications you want to receive
+
+For stuck cron job detection:
+1. Go to **Stores > Configuration > Advanced > System > Cron Monitoring**
+2. Configure the thresholds for considering a cron job as stuck for each cron group
+
+## Implementation Details
+
+The module provides plugins for various Magento components to catch and handle errors in a standardized way.
+It uses the `Lachestry_Telegram` module to send notifications to configured Telegram chats.
 
 ## Functionality
 

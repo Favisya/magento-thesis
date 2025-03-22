@@ -57,6 +57,7 @@
                 <item name="cron" xsi:type="object">Lachestry\Notifier\Model\Formatter\CronFormatter</item>
                 <item name="message_queue" xsi:type="object">Lachestry\Notifier\Model\Formatter\QueueFormatter</item>
                 <item name="rest_api" xsi:type="object">Lachestry\Notifier\Model\Formatter\ApiFormatter</item>
+                <item name="stuck_cron" xsi:type="object">Lachestry\Notifier\Model\Formatter\StuckCronFormatter</item>
             </argument>
         </arguments>
     </type>

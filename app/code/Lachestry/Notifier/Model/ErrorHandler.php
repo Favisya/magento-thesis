@@ -73,6 +73,7 @@ class ErrorHandler
             'cron'          => $this->config->isCronNotificationEnabled(),
             'message_queue' => $this->config->isQueueNotificationEnabled(),
             'rest_api'      => $this->config->isApiNotificationEnabled(),
+            'stuck_cron'    => $this->config->isStuckCronNotificationEnabled(),
             default         => true
         };
     }

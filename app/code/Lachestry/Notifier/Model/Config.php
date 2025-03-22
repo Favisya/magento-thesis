@@ -13,12 +13,13 @@ class Config
     private const XML_PATH_NOTIFY_CRON = 'lachestry_notifier/events/notify_cron';
     private const XML_PATH_NOTIFY_QUEUE = 'lachestry_notifier/events/notify_queue';
     private const XML_PATH_NOTIFY_API = 'lachestry_notifier/events/notify_api';
+    private const XML_PATH_NOTIFY_STUCK_CRON = 'lachestry_notifier/events/notify_stuck_cron';
 
     /**
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        private readonly ScopeConfigInterface $scopeConfig
+        private readonly ScopeConfigInterface $scopeConfig,
     ) {
     }
 
@@ -46,10 +47,10 @@ class Config
     public function isIndexerNotificationEnabled(?int $storeId = null): bool
     {
         return $this->isEnabled($storeId) && $this->scopeConfig->isSetFlag(
-            self::XML_PATH_NOTIFY_INDEXER,
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
+                self::XML_PATH_NOTIFY_INDEXER,
+                ScopeInterface::SCOPE_STORE,
+                $storeId
+            );
     }
 
     /**
@@ -61,10 +62,10 @@ class Config
     public function isCronNotificationEnabled(?int $storeId = null): bool
     {
         return $this->isEnabled($storeId) && $this->scopeConfig->isSetFlag(
-            self::XML_PATH_NOTIFY_CRON,
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
+                self::XML_PATH_NOTIFY_CRON,
+                ScopeInterface::SCOPE_STORE,
+                $storeId
+            );
     }
 
     /**
@@ -76,10 +77,10 @@ class Config
     public function isQueueNotificationEnabled(?int $storeId = null): bool
     {
         return $this->isEnabled($storeId) && $this->scopeConfig->isSetFlag(
-            self::XML_PATH_NOTIFY_QUEUE,
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
+                self::XML_PATH_NOTIFY_QUEUE,
+                ScopeInterface::SCOPE_STORE,
+                $storeId
+            );
     }
 
     /**
@@ -91,9 +92,18 @@ class Config
     public function isApiNotificationEnabled(?int $storeId = null): bool
     {
         return $this->isEnabled($storeId) && $this->scopeConfig->isSetFlag(
-            self::XML_PATH_NOTIFY_API,
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
+                self::XML_PATH_NOTIFY_API,
+                ScopeInterface::SCOPE_STORE,
+                $storeId
+            );
+    }
+
+    public function isStuckCronNotificationEnabled(?int $storeId = null): bool
+    {
+        return $this->isEnabled($storeId) && $this->scopeConfig->isSetFlag(
+                self::XML_PATH_NOTIFY_STUCK_CRON,
+                ScopeInterface::SCOPE_STORE,
+                $storeId
+            );
     }
 }

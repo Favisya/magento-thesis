@@ -45,6 +45,13 @@
                         <field id="lachestry_notifier/general/enabled">1</field>
                     </depends>
                 </field>
+                <field id="notify_stuck_cron" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Notify on Stuck Cron Jobs</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="lachestry_notifier/general/enabled">1</field>
+                    </depends>
+                </field>
             </group>
         </section>
     </system>
