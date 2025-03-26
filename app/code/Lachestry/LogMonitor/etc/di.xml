@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Lachestry\LogMonitor\Api\LogErrorInterface" type="Lachestry\LogMonitor\Model\LogError" />
+    <preference for="Lachestry\LogMonitor\Api\LogErrorRepositoryInterface" type="Lachestry\LogMonitor\Model\LogErrorRepository" />
+    
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="log_error_listing_data_source" xsi:type="string">Lachestry\LogMonitor\Model\ResourceModel\LogError\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    
+    <virtualType name="Lachestry\LogMonitor\Model\ResourceModel\LogError\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">lachestry_log_errors</argument>
+            <argument name="resourceModel" xsi:type="string">Lachestry\LogMonitor\Model\ResourceModel\LogError</argument>
+        </arguments>
+    </virtualType>
+</config> 

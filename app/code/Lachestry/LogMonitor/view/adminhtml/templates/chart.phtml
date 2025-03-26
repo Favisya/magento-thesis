@@ -1,0 +1,67 @@
+<?php
+/** @var \Lachestry\LogMonitor\Block\Adminhtml\Chart $block */
+?>
+
+<div class="log-chart-container">
+    <div class="log-chart-filters">
+        <form id="log-chart-filters-form" class="admin__fieldset">
+            <div class="admin__field">
+                <label class="admin__field-label" for="date_from"><?= $block->escapeHtml(__('From Date')) ?></label>
+                <div class="admin__field-control">
+                    <input type="date" id="date_from" name="from" class="admin__control-text" value="<?= $block->escapeHtmlAttr($block->getRequest()->getParam('from')) ?>">
+                </div>
+            </div>
+            
+            <div class="admin__field">
+                <label class="admin__field-label" for="date_to"><?= $block->escapeHtml(__('To Date')) ?></label>
+                <div class="admin__field-control">
+                    <input type="date" id="date_to" name="to" class="admin__control-text" value="<?= $block->escapeHtmlAttr($block->getRequest()->getParam('to')) ?>">
+                </div>
+            </div>
+            
+            <div class="admin__field">
+                <div class="admin__field-control">
+                    <button id="apply-filters" class="action-primary"><?= $block->escapeHtml(__('Apply Filters')) ?></button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <div class="log-chart">
+        <canvas id="logErrorChart" width="400" height="200"></canvas>
+    </div>
+</div>
+
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Lachestry_LogMonitor/js/chart/log-error-chart": {
+            "chartData": <?= /* @noEscape */ $block->getChartData() ?>
+        }
+    }
+}
+</script>
+
+<style>
+.log-chart-container {
+    margin: 20px 0;
+}
+
+.log-chart-filters {
+    margin-bottom: 20px;
+    background: #f8f8f8;
+    padding: 15px;
+    border: 1px solid #e3e3e3;
+}
+
+.log-chart-filters .admin__field {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.log-chart {
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #e3e3e3;
+}
+</style> 

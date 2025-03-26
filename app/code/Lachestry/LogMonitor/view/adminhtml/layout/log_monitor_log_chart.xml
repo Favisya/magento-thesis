@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <link src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="Lachestry\LogMonitor\Block\Adminhtml\Chart" 
+                   name="log_error_chart"
+                   template="Lachestry_LogMonitor::chart.phtml" />
+        </referenceContainer>
+    </body>
+</page> 
