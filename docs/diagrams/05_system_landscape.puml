@@ -1,0 +1,54 @@
+@startuml
+!include <C4/C4_Container>
+
+title Системный ландшафт решения для мониторинга
+
+Person(admin, "Администратор", "Отвечает за поддержку магазина и реагирование на ошибки")
+
+System_Boundary(magento_system, "Magento 2") {
+    Container(cron, "Cron", "Система планирования задач", "Планировщик задач")
+    Container(rabbitmq, "RabbitMQ", "Система очередей", "Обработка сообщений")
+    Container(indexer, "Indexer", "Система индексации данных", "Обработка индексов")
+    Container(daemons, "Daemon Processes", "Фоновые процессы", "Выполнение задач")
+    Container(logs, "Логи системы", "Файлы логов", "Хранение информации об ошибках и событиях")
+}
+
+System_Boundary(monitoring_system, "Система мониторинга Magento") {
+    Container(cron_monitor, "CronMonitor", "Lachestry_CronMonitor", "Мониторинг cron-задач")
+    Container(rabbitmq_monitor, "RabbitMQMonitor", "Lachestry_RabbitMQMonitor", "Мониторинг очередей RabbitMQ")
+    Container(indexer_monitor, "IndexerMonitor", "Lachestry_IndexerMonitor", "Мониторинг индексеров")
+    Container(daemon_monitor, "DaemonMonitor", "Lachestry_DaemonMonitor", "Мониторинг демонов системы", $tags="future")
+    Container(log_monitor, "LogMonitor", "Lachestry_LogMonitor", "Анализ системных логов")
+    Container(notifier, "Notifier", "Lachestry_Notifier", "Отправка уведомлений")
+    Container(telegram_integration, "TelegramIntegration", "Lachestry_TelegramIntegration", "Интеграция с Telegram")
+}
+
+System_Ext(mysql, "MySQL", "База данных")
+System_Ext(telegram, "Telegram", "Мессенджер")
+
+Rel(admin, telegram, "Получение уведомлений")
+Rel(admin, monitoring_system, "Настройка и мониторинг")
+
+Rel(cron_monitor, cron, "Мониторинг состояния")
+Rel(rabbitmq_monitor, rabbitmq, "Мониторинг состояния")
+Rel(indexer_monitor, indexer, "Мониторинг состояния")
+Rel(daemon_monitor, daemons, "Мониторинг состояния", $tags="future")
+Rel(log_monitor, logs, "Анализ и мониторинг")
+
+Rel(cron_monitor, notifier, "Отправка уведомлений о проблемах")
+Rel(rabbitmq_monitor, notifier, "Отправка уведомлений о проблемах")
+Rel(indexer_monitor, notifier, "Отправка уведомлений о проблемах")
+Rel(daemon_monitor, notifier, "Отправка уведомлений о проблемах", $tags="future")
+
+Rel(notifier, telegram_integration, "Отправка сообщений")
+Rel(telegram_integration, telegram, "API интеграция")
+
+Rel(cron_monitor, mysql, "Сохранение информации")
+Rel(rabbitmq_monitor, mysql, "Сохранение информации")
+Rel(indexer_monitor, mysql, "Сохранение информации")
+Rel(daemon_monitor, mysql, "Сохранение информации", $tags="future")
+Rel(log_monitor, mysql, "Сохранение информации")
+Rel(telegram_integration, mysql, "Сохранение информации о чатах")
+
+SHOW_LEGEND()
+@enduml 

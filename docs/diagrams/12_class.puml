@@ -1,0 +1,176 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam packageStyle rectangle
+skinparam class {
+  BackgroundColor #FEFECE
+  BorderColor #999999
+  ArrowColor #333333
+}
+
+title Диаграмма классов системы мониторинга Magento
+
+namespace Lachestry\Configuration {
+    class ConfigManager {
+        +getConfigValue()
+        +isEnabled()
+    }
+}
+
+namespace Lachestry\Cron {
+    interface JobCodeInterface {
+        +getJobCodeName()
+        +getSchedule()
+        +getGroup()
+    }
+    
+    class JobCode implements JobCodeInterface {
+        -jobCodeName
+        -schedule
+        -group
+    }
+    
+    abstract class AbstractCronTask {
+        #logger
+        +execute()
+    }
+    
+    class CronRepository {
+        +getJobs()
+        +saveJob()
+    }
+}
+
+namespace Lachestry\CronMonitoring {
+    class Config {
+        +getCronGroupTimeMap()
+    }
+    
+    class CronGroupRepository {
+        +getCronGroups()
+        +getAllCronJobs()
+    }
+    
+    class CronMonitor {
+        -configManager
+        -cronRepository
+        -notifier
+        +checkCronJobs()
+    }
+    
+    class StuckCronChecker {
+        -cronMonitoringConfig
+        -errorHandler
+        +execute()
+    }
+}
+
+namespace Lachestry\RabbitMQMonitor {
+    interface QueueManagerInterface {
+        +getQueues()
+        +checkQueueHealth()
+    }
+    
+    class RabbitMQManager implements QueueManagerInterface {
+        +getQueues()
+        +checkQueueHealth()
+    }
+    
+    class QueueMonitor {
+        -queueManager
+        -notifier
+        +checkQueues()
+    }
+    
+    class ConsumerActivityManager {
+        +updateStatus()
+    }
+    
+    class UpdateConsumerStatus {
+        -consumerActivityManager
+        +execute()
+    }
+}
+
+namespace Lachestry\IndexerMonitor {
+    class IndexerMonitor {
+        -indexerManager
+        -notifier
+        +checkIndexers()
+    }
+}
+
+namespace Lachestry\LogMonitor {
+    class LogAnalyzer {
+        -logReader
+        -errorFilter
+        +analyzeLogFiles()
+        +saveLogErrors()
+    }
+    
+    class LogErrorRepository {
+        +saveError()
+        +getErrorsByLevel()
+    }
+}
+
+namespace Lachestry\Notifier {
+    interface NotifierInterface {
+        +notify()
+        +sendReport()
+    }
+    
+    class NotificationManager implements NotifierInterface {
+        -providers
+        +notify()
+        +sendReport()
+    }
+    
+    interface NotificationProviderInterface {
+        +send()
+        +isAvailable()
+    }
+    
+    class ErrorHandler {
+        -notificationProvider
+        +handleError()
+    }
+    
+    class MessageFormatter {
+        +formatTelegramMessage()
+    }
+}
+
+namespace Lachestry\TelegramIntegration {
+    class TelegramProvider implements NotificationProviderInterface {
+        -apiClient
+        -chatRepository
+        +send()
+    }
+    
+    class ChatRepository {
+        +getActiveChats()
+        +saveChat()
+    }
+}
+
+' Основные связи
+Lachestry\CronMonitoring.CronMonitor --> Lachestry\Notifier.NotifierInterface
+Lachestry\CronMonitoring.StuckCronChecker --> Lachestry\Notifier.ErrorHandler
+Lachestry\RabbitMQMonitor.QueueMonitor --> Lachestry\Notifier.NotifierInterface
+Lachestry\IndexerMonitor.IndexerMonitor --> Lachestry\Notifier.NotifierInterface
+Lachestry\Notifier.NotificationManager --> Lachestry\TelegramIntegration.TelegramProvider
+Lachestry\LogMonitor.LogAnalyzer --> Lachestry\LogMonitor.LogErrorRepository
+
+' Связь с конфигурацией
+Lachestry\CronMonitoring.CronMonitor --> Lachestry\Configuration.ConfigManager
+Lachestry\RabbitMQMonitor.QueueMonitor --> Lachestry\Configuration.ConfigManager
+Lachestry\IndexerMonitor.IndexerMonitor --> Lachestry\Configuration.ConfigManager
+Lachestry\LogMonitor.LogAnalyzer --> Lachestry\Configuration.ConfigManager
+Lachestry\Notifier.NotificationManager --> Lachestry\Configuration.ConfigManager
+
+' Дополнительные связи
+Lachestry\CronMonitoring.CronMonitor --> Lachestry\Cron.CronRepository
+Lachestry\RabbitMQMonitor.UpdateConsumerStatus --> Lachestry\RabbitMQMonitor.ConsumerActivityManager
+
+@enduml 

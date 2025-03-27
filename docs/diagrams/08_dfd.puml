@@ -1,0 +1,72 @@
+@startuml
+!define DFD
+skinparam componentStyle rectangle
+skinparam component {
+  BackgroundColor #FEFECE
+  BorderColor #666666
+  ArrowColor #666666
+}
+
+title DFD: Мониторинг задач Magento
+
+' Внешние источники данных
+[Системные задачи\nMagento] as system_tasks #LightBlue
+[Планировщик\nCron] as cron_scheduler #LightBlue
+[Очереди\nRabbitMQ] as rabbitmq #LightBlue
+[Telegram\nБот] as telegram_bot #LightBlue
+[Файлы логов\nMagento] as log_files #LightBlue
+
+' Функции обработки данных
+rectangle "Мониторинг\nCron-задач" as cron_monitor #LightGreen
+rectangle "Мониторинг\nRabbitMQ" as rabbitmq_monitor #LightGreen
+rectangle "Анализ\nлогов" as log_monitor #LightGreen
+rectangle "Анализ\nсостояния" as state_analyzer #LightGreen
+rectangle "Отправка\nуведомлений" as notification_sender #LightGreen
+
+' Хранилища данных
+database "База данных\nMagento" as magento_db #LightYellow {
+  [cron_schedule]
+  [queue]
+  [queue_message]
+  [queue_message_status]
+}
+
+database "База данных\nмониторинга" as monitoring_db #LightYellow {
+  [lachestry_job_codes_info]
+  [rabbitmq_consumer_activity]
+  [lachestry_telegram_chats]
+  [lachestry_log_errors]
+}
+
+' Потоки данных
+system_tasks --> cron_monitor : "Данные о задачах"
+cron_scheduler --> cron_monitor : "Расписание и статусы"
+rabbitmq --> rabbitmq_monitor : "Состояние очередей"
+log_files --> log_monitor : "Содержимое логов"
+
+cron_monitor --> magento_db : "Запись в cron_schedule"
+cron_monitor --> monitoring_db : "Запись в job_codes_info"
+
+rabbitmq_monitor --> magento_db : "Запись в queue*"
+rabbitmq_monitor --> monitoring_db : "Запись в consumer_activity"
+
+log_monitor --> monitoring_db : "Запись в log_errors"
+
+cron_monitor --> state_analyzer : "Сведения о проблемах"
+rabbitmq_monitor --> state_analyzer : "Сведения о проблемах"
+
+magento_db --> state_analyzer : "Данные о состоянии"
+monitoring_db --> state_analyzer : "История мониторинга"
+
+state_analyzer --> notification_sender : "Результаты анализа"
+notification_sender --> telegram_bot : "Уведомления"
+
+' Легенда
+legend right
+  |= Обозначение |= Значение |
+  | <#LightBlue> | Внешние источники данных |
+  | <#LightGreen> | Функции обработки данных |
+  | <#LightYellow> | Хранилища данных |
+endlegend
+
+@enduml 

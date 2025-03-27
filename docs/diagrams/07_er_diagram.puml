@@ -1,0 +1,231 @@
+@startuml
+
+' Настройки диаграммы
+skinparam class {
+  BackgroundColor #FEFECE
+  ArrowColor #333333
+  BorderColor #999999
+}
+skinparam linetype ortho
+
+!define table(x) class x << (T,#FFAAAA) >>
+!define primary_key(x) <b>x</b>
+!define foreign_key(x) <i>x</i>
+
+title Модель данных системы мониторинга Magento
+
+' Концептуальный уровень
+package "Концептуальный уровень" {
+  class "Задача" as Task {
+    + Код задачи
+    + Статус
+    + Время выполнения
+    + Сообщения
+  }
+
+  class "Планировщик" as Scheduler {
+    + Расписание
+    + Модуль
+    + Группа
+  }
+
+  class "Очередь" as Queue {
+    + Название
+    + Сообщения
+    + Статус
+  }
+
+  class "Потребитель" as Consumer {
+    + Имя
+    + Статус
+    + PID
+    + Время активности
+  }
+
+  class "Telegram чат" as TelegramChat {
+    + ID чата
+    + Имя чата
+    + Имя пользователя
+    + Активность
+  }
+
+  class "Лог-запись" as LogEntry {
+    + Источник (лог-файл)
+    + Уровень серьезности
+    + Сообщение
+    + Контекст
+    + Дата
+  }
+
+  Task --> Scheduler : "имеет"
+  Queue --> Consumer : "мониторится"
+  TelegramChat --> Task : "получает уведомления"
+  LogEntry ..> "База данных " : "сохраняется"
+}
+
+' Логический уровень
+package "Логический уровень" {
+  class "Задача" as LogicalTask {
+    + Код задачи (varchar)
+    + Статус (varchar)
+    + Время создания (timestamp)
+    + Время выполнения (timestamp)
+    + Сообщения (text)
+  }
+
+  class "Информация о задаче" as LogicalJobInfo {
+    + Код задачи (varchar)
+    + Расписание (varchar)
+    + Модуль (varchar)
+    + Конфигурация (varchar)
+    + Группа (varchar)
+  }
+
+  class "Очередь" as LogicalQueue {
+    + Название (varchar)
+    + Время обновления (timestamp)
+  }
+
+  class "Сообщение очереди" as LogicalQueueMessage {
+    + Тема (varchar)
+    + Тело (text)
+    + ID сообщения (varchar)
+    + Время публикации (timestamp)
+    + Статус (int)
+  }
+
+  class "Статус сообщения" as LogicalMessageStatus {
+    + ID очереди (int)
+    + ID сообщения (bigint)
+    + Время обновления (timestamp)
+    + Статус (int)
+    + Количество попыток (int)
+  }
+
+  class "Активность потребителя" as LogicalConsumer {
+    + Имя потребителя (varchar)
+    + Статус (varchar)
+    + PID (int)
+    + Время активности (timestamp)
+  }
+
+  class "Telegram чат" as LogicalTelegramChat {
+    + ID чата (bigint)
+    + Имя чата (varchar)
+    + Имя пользователя (varchar)
+    + Время создания (timestamp)
+    + Время обновления (timestamp)
+    + Активность (smallint)
+  }
+
+  class "Ошибки в логах" as LogicalLogError {
+    + Лог-файл (varchar)
+    + Серьезность (varchar)
+    + Сообщение (text)
+    + Контекст (varchar)
+    + Дата (timestamp)
+  }
+
+  LogicalTask --> LogicalJobInfo : "связана с"
+  LogicalQueue --> LogicalQueueMessage : "содержит"
+  LogicalQueueMessage --> LogicalMessageStatus : "имеет статус"
+  LogicalConsumer --> LogicalQueue : "мониторит"
+  LogicalLogError --> "База данных" : "сохраняется в"
+}
+
+' Физический уровень
+package "Физический уровень" {
+  table(cron_schedule) {
+    primary_key(schedule_id): int
+    --
+    job_code: varchar(255)
+    status: varchar(7)
+    messages: text
+    created_at: timestamp
+    scheduled_at: timestamp
+    executed_at: timestamp
+    finished_at: timestamp
+  }
+
+  table(lachestry_job_codes_info) {
+    primary_key(id): smallint(5) unsigned
+    --
+    job_code_name: varchar(100)
+    schedule: varchar(50)
+    module: varchar(150)
+    config_path: varchar(200)
+    group: varchar(100)
+  }
+
+  table(rabbitmq_consumer_activity) {
+    primary_key(entity_id): int(10) unsigned
+    --
+    consumer_name: varchar(255)
+    status: varchar(50)
+    pid: int(10) unsigned
+    last_activity: timestamp
+  }
+
+  table(queue) {
+    primary_key(id): int
+    --
+    name: varchar(255)
+    updated_at: timestamp
+  }
+
+  table(queue_message) {
+    primary_key(id): bigint
+    --
+    foreign_key(topic_name): varchar(255)
+    body: longtext
+    message_id: varchar(100)
+    published_at: timestamp
+    status: smallint
+  }
+
+  table(queue_message_status) {
+    primary_key(id): bigint
+    --
+    foreign_key(queue_id): int
+    foreign_key(message_id): bigint
+    updated_at: timestamp
+    status: smallint
+    number_of_trials: smallint
+  }
+
+  table(lachestry_telegram_chats) {
+    primary_key(id): smallint(5) unsigned
+    --
+    chat_id: bigint(20)
+    chat_name: varchar(60)
+    user_name: varchar(40)
+    created_at: timestamp
+    telegram_updated_at: timestamp
+    is_active: smallint(6)
+  }
+
+  table(lachestry_log_errors) {
+    primary_key(entity_id): int unsigned
+    --
+    log_file: varchar(255)
+    date: timestamp
+    severity: varchar(50)
+    message: text
+    context: varchar(255)
+  }
+
+  lachestry_job_codes_info "1" --> "0..*" cron_schedule : связь по job_code
+  queue --> queue_message_status : has
+  queue_message --> queue_message_status : has
+  rabbitmq_consumer_activity --> queue : monitors
+}
+
+legend right
+  |= Обозначение |= Значение |
+  | <#FFAAAA> | Таблица базы данных |
+  | <b>Поле</b> | Первичный ключ |
+  | <i>Поле</i> | Внешний ключ |
+  | --> | Соединение |
+  | ..> | Зависимость |
+endlegend
+@enduml

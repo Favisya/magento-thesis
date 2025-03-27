@@ -1,0 +1,139 @@
+@startuml
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 2
+skinparam responseMessageBelowArrow true
+
+title Последовательность обработки сбоя в системе мониторинга
+
+participant "Система\nМониторинга" as Monitor
+participant "Magento" as Magento
+participant "RabbitMQ" as RabbitMQ
+participant "Файлы\nлогов" as Logs
+participant "Telegram\nAPI" as Telegram
+participant "База данных\nмониторинга" as DB
+actor "Администратор" as Admin
+
+autonumber
+
+== Обнаружение сбоя ==
+Monitor -> Magento: Проверка состояния процессов
+activate Magento
+Magento --> Monitor: Статус процессов
+deactivate Magento
+
+alt Сбой в Cron
+    Monitor -> Magento: Проверка зависших задач
+    activate Magento
+    Magento --> Monitor: Список зависших задач
+    deactivate Magento
+    
+    Monitor -> Monitor: Анализ критичности
+    activate Monitor
+    Monitor --> Monitor: Результат анализа
+    deactivate Monitor
+    
+    Monitor -> DB: Сохранение информации о сбое
+    activate DB
+    DB --> Monitor: Подтверждение
+    deactivate DB
+    
+    Monitor -> Telegram: Отправка уведомления
+    activate Telegram
+    Telegram -> Admin: Уведомление о сбое
+    Telegram --> Monitor: Подтверждение отправки
+    deactivate Telegram
+
+else Сбой в RabbitMQ
+    Monitor -> RabbitMQ: Проверка состояния очередей
+    activate RabbitMQ
+    RabbitMQ --> Monitor: Статус очередей
+    deactivate RabbitMQ
+    
+    Monitor -> Monitor: Анализ критичности
+    activate Monitor
+    Monitor --> Monitor: Результат анализа
+    deactivate Monitor
+    
+    Monitor -> DB: Сохранение информации о сбое
+    activate DB
+    DB --> Monitor: Подтверждение
+    deactivate DB
+    
+    Monitor -> Telegram: Отправка уведомления
+    activate Telegram
+    Telegram -> Admin: Уведомление о сбое
+    Telegram --> Monitor: Подтверждение отправки
+    deactivate Telegram
+
+else Сбой в индексах
+    Monitor -> Magento: Проверка состояния индексов
+    activate Magento
+    Magento --> Monitor: Статус индексов
+    deactivate Magento
+    
+    Monitor -> Monitor: Анализ критичности
+    activate Monitor
+    Monitor --> Monitor: Результат анализа
+    deactivate Monitor
+    
+    Monitor -> DB: Сохранение информации о сбое
+    activate DB
+    DB --> Monitor: Подтверждение
+    deactivate DB
+    
+    Monitor -> Telegram: Отправка уведомления
+    activate Telegram
+    Telegram -> Admin: Уведомление о сбое
+    Telegram --> Monitor: Подтверждение отправки
+    deactivate Telegram
+
+else Сбой в демонах
+    Monitor -> Magento: Проверка состояния демонов
+    activate Magento
+    Magento --> Monitor: Статус демонов
+    deactivate Magento
+    
+    Monitor -> Monitor: Анализ критичности
+    activate Monitor
+    Monitor --> Monitor: Результат анализа
+    deactivate Monitor
+    
+    Monitor -> DB: Сохранение информации о сбое
+    activate DB
+    DB --> Monitor: Подтверждение
+    deactivate DB
+    
+    Monitor -> Telegram: Отправка уведомления
+    activate Telegram
+    Telegram -> Admin: Уведомление о сбое
+    Telegram --> Monitor: Подтверждение отправки
+    deactivate Telegram
+
+else Анализ логов
+    Monitor -> Logs: Чтение и анализ логов
+    activate Logs
+    Logs --> Monitor: Содержимое логов
+    deactivate Logs
+    
+    Monitor -> Monitor: Поиск критических ошибок
+    activate Monitor
+    Monitor --> Monitor: Найденные ошибки
+    deactivate Monitor
+    
+    Monitor -> Monitor: Анализ причин и контекста
+    activate Monitor
+    Monitor --> Monitor: Результаты анализа
+    deactivate Monitor
+    
+    Monitor -> DB: Сохранение информации об ошибках
+    activate DB
+    DB --> Monitor: Подтверждение
+    deactivate DB
+end
+
+Monitor -> DB: Обновление статистики
+activate DB
+DB --> Monitor: Подтверждение
+deactivate DB
+
+@enduml 

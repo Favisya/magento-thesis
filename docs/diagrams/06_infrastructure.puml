@@ -1,0 +1,35 @@
+@startuml
+title IT-инфраструктура системы мониторинга
+
+node "Magento сервер" {
+  component [Magento 2 (PHP)]
+  component [PHP-FPM]
+  component [Nginx]
+  component [Redis контейнер (Кэш Magento)]
+}
+
+node "Docker Host (Мониторинг)" {
+  component [RabbitMQ контейнер]
+  component [Elasticsearch контейнер]
+}
+
+database "MySQL сервер" {
+  [MySQL (Magento DB)]
+  [MySQL (Мониторинг DB)]
+}
+
+[Magento 2 (PHP)] --> [MySQL (Magento DB)] : DB Connection
+[Magento 2 (PHP)] --> [MySQL (Мониторинг DB)] : Хранение данных мониторинга
+[Magento 2 (PHP)] --> [RabbitMQ контейнер] : AMQP Connection
+[Magento 2 (PHP)] --> [Redis контейнер (Кэш Magento)] : Cache
+[Magento 2 (PHP)] --> [Elasticsearch контейнер] : Search API
+
+note right of [MySQL (Мониторинг DB)]
+  Хранение информации о:
+  - Cron задачах
+  - RabbitMQ консьюмерах
+  - Индексах
+  - Daemon процессах
+  - Telegram чатах
+end note
+@enduml 

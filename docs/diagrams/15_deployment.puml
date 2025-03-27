@@ -1,0 +1,97 @@
+@startuml
+skinparam node {
+  BackgroundColor #F0F0F0
+  BorderColor #333333
+}
+skinparam artifact {
+  BackgroundColor #FEFECE
+  BorderColor #666666
+}
+skinparam linetype ortho
+
+title Диаграмма развертывания системы мониторинга Magento
+
+node "Сервер приложений" as AppServer {
+  artifact "Magento 2" as Magento
+  artifact "PHP-FPM" as PhpFpm
+  artifact "Nginx" as Nginx
+  artifact "Redis" as Redis
+  
+  artifact "Модули мониторинга" as MonitoringExtension {
+    artifact "CronMonitor" as CronMon
+    artifact "RabbitMQMonitor" as RMQMon
+    artifact "IndexerMonitor" as IdxMon
+    artifact "LogMonitor" as LogMon
+  }
+  
+  artifact "Модуль уведомлений" as NotificationExtension {
+    artifact "NotificationManager" as NotifMan
+    artifact "TelegramBot" as TelegramBot
+  }
+  
+  artifact "Supervisor" as Supervisor
+}
+
+node "Docker Engine" as DockerEnvironment {  
+  node "Контейнер MySQL 5.7" as DbServer {
+    artifact "MySQL 5.7" as MySQL {
+      artifact "Magento База данных" as MagentoDb
+      artifact "База мониторинга" as MonitoringDb
+    }
+    note right of MySQL 
+      Порт: 3307:3306
+    end note
+  }
+  
+  node "Контейнер RabbitMQ" as RabbitMQServer {
+    artifact "RabbitMQ 3-management" as RabbitMQ
+    note right of RabbitMQ
+      Порты: 5672 (AMQP)
+             15672 (Веб-интерфейс)
+    end note
+  }
+  
+  node "Контейнер Elasticsearch" as ElasticsearchServer {
+    artifact "Elasticsearch 7.17.11" as Elasticsearch
+    note right of Elasticsearch
+      Порт: 9202:9200
+      Режим: single-node
+    end note
+  }
+}
+
+' Связи между компонентами
+Magento ..> MonitoringExtension : <<включает>>
+MonitoringExtension ..> NotificationExtension : <<использует>>
+MonitoringExtension ..> MySQL : <<сохраняет данные>>
+MonitoringExtension ..> RabbitMQ : <<мониторит>>
+RabbitMQ ..> Magento : <<сообщения>>
+Elasticsearch ..> Magento : <<индексация>>
+NotificationExtension ..> TelegramBot : <<отправляет\nсообщения>>
+Supervisor ..> CronMon : <<управляет>>
+Supervisor ..> RMQMon : <<управляет>>
+
+AppServer --> DockerEnvironment : <<TCP/IP>>
+
+note bottom of MonitoringDb
+  Хранит информацию о состоянии:
+  - cron-задач
+  - RabbitMQ потребителей
+  - индексации
+  - ошибок в логах
+end note
+
+note right of NotificationExtension
+  Отправляет уведомления:
+  - о проблемах с cron-задачами
+  - о проблемах с очередями
+  - о проблемах с индексацией
+  - о критических ошибках в логах
+end note
+
+note bottom of DockerEnvironment
+  Контейнеры объединены
+  в сеть "elastic" (bridge)
+end note
+
+@enduml

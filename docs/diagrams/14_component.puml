@@ -1,0 +1,79 @@
+@startuml
+skinparam componentStyle uml2
+skinparam component {
+  BackgroundColor #f5f5f5
+  BorderColor #333333
+  ArrowColor #666666
+}
+
+title Диаграмма компонентов системы мониторинга Magento
+
+package "Система мониторинга Magento" {
+  package "Модули мониторинга" {
+    [CronMonitor] as CM
+    [RabbitMQMonitor] as RM
+    [IndexerMonitor] as IM
+    [LogMonitor] as LM
+    
+    interface "IMonitor" as IMon
+    
+    CM -up- IMon
+    RM -up- IMon
+    IM -up- IMon
+    LM -up- IMon
+  }
+  
+  package "Уведомления" {
+    [NotificationService] as NS
+    [TelegramService] as TS
+    
+    interface "INotifier" as INot
+    interface "IMessageFormatter" as IMF
+    
+    NS -- INot
+    TS -up- INot
+    NS -- IMF
+  }
+  
+  package "Хранение данных" {
+    [ErrorLogStorage] as ELS
+    [MetricsStorage] as MS
+    [NotificationHistory] as NH
+    
+    interface "IStorage" as ISto
+    
+    ELS -up- ISto
+    MS -up- ISto
+    NH -up- ISto
+  }
+  
+  package "Ядро Magento" {
+    [ConfigurationManager] as CFM
+    [SchedulerService] as ScS
+    [MagentoApi] as API
+    
+    interface "IConfigurable" as ICfg
+    interface "ISchedulable" as ISch
+    
+    CFM -- ICfg
+    ScS -- ISch
+  }
+}
+
+' Связи между компонентами
+IMon )-down- NS
+INot )-down- ELS
+ISto )-up- API
+ICfg )-up- IMon
+ISch )-up- CM
+ISch )-up- RM
+
+note "Мониторы отслеживают состояние\nсистемных компонентов\nи отправляют данные при\nобнаружении проблем" as N1
+note "Сервисы уведомлений форматируют\nи отправляют сообщения\nчерез Telegram" as N2
+note "Хранилища данных сохраняют\nинформацию о событиях и ошибках\nв базе данных Magento" as N3
+
+CM .. N1
+NS .. N2
+ELS .. N3
+
+@enduml
