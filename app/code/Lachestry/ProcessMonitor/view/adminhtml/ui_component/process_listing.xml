@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">process_listing.process_listing_data_source</item>
+            <item name="deps" xsi:type="string">process_listing.process_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>process_columns</spinner>
+        <deps>
+            <dep>process_listing.process_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="process_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <updateUrl path="mui/index/render"/>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">pid</param>
+            </storageConfig>
+        </settings>
+        <aclResource>Lachestry_ProcessMonitor::process_list_view</aclResource>
+        <dataProvider class="Lachestry\ProcessMonitor\Ui\DataProvider\ProcessDataProvider" name="process_listing_data_source">
+            <settings>
+                <requestFieldName>pid</requestFieldName>
+                <primaryFieldName>pid</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>false</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filters name="listing_filters"/>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="process_columns">
+        <column name="pid">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">PID</label>
+                <sortable>true</sortable>
+                <dataType>text</dataType>
+            </settings>
+        </column>
+        <column name="user">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">User</label>
+                <sortable>true</sortable>
+                <dataType>text</dataType>
+            </settings>
+        </column>
+        <column name="cpu">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">CPU %</label>
+                <sortable>true</sortable>
+                <dataType>text</dataType>
+            </settings>
+        </column>
+        <column name="memory">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Memory %</label>
+                <sortable>true</sortable>
+                <dataType>text</dataType>
+            </settings>
+        </column>
+        <column name="command">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Command</label>
+                <sortable>true</sortable>
+                <dataType>text</dataType>
+            </settings>
+        </column>
+    </columns>
+</listing>

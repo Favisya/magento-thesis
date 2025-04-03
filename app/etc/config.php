@@ -333,6 +333,7 @@ return [
         'Lachestry_CronMonitoring' => 1,
         'Lachestry_LogMonitor' => 1,
         'Lachestry_Telegram' => 1,
+        'Lachestry_ProcessMonitor' => 1,
         'Lachestry_RabbitMQMonitor' => 1,
         'Lachestry_Notifier' => 1,
         'PayPal_Braintree' => 1,

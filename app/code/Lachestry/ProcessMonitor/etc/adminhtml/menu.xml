@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Lachestry_ProcessMonitor::process_monitor" title="Process Monitor" module="Lachestry_ProcessMonitor" sortOrder="100" parent="Magento_Backend::system" resource="Lachestry_ProcessMonitor::process_monitor"/>
+        <add id="Lachestry_ProcessMonitor::process_list" title="Daemon Processes" module="Lachestry_ProcessMonitor" sortOrder="10" parent="Lachestry_ProcessMonitor::process_monitor" action="processmonitor/process/index" resource="Lachestry_ProcessMonitor::process_list"/>
+    </menu>
+</config> 
