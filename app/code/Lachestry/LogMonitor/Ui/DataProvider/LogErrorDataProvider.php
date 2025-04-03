@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\LogMonitor\Ui\DataProvider;
@@ -14,7 +15,6 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider;
 class LogErrorDataProvider extends DataProvider
 {
     protected CollectionFactory $collectionFactory;
-    protected FilterBuilder $filterBuilder;
 
     public function __construct(
         $name,
@@ -35,10 +35,10 @@ class LogErrorDataProvider extends DataProvider
             $reporting,
             $searchCriteriaBuilder,
             $request,
+            $filterBuilder,
             $meta,
             $data
         );
-        $this->filterBuilder = $filterBuilder;
         $this->collectionFactory = $collectionFactory;
     }
 
@@ -46,23 +46,20 @@ class LogErrorDataProvider extends DataProvider
     {
         $arrItems = [];
         $arrItems['items'] = [];
-        
+
         foreach ($searchResult->getItems() as $item) {
             $itemData = $item->getData();
             $arrItems['items'][] = $itemData;
         }
-        
+
         $arrItems['totalRecords'] = $searchResult->getTotalCount();
-        
+
         return $arrItems;
     }
-    
+
     public function addFilter(Filter $filter)
     {
-        $this->filterBuilder->setField($filter->getField());
-        $this->filterBuilder->setValue($filter->getValue());
-        $this->filterBuilder->setConditionType($filter->getConditionType());
-        
-        $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
+        $this->searchCriteriaBuilder->addFilter($filter);
+        return $this;
     }
-} 
+}

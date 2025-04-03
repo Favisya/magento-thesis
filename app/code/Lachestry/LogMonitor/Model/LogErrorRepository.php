@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\LogMonitor\Model;
@@ -84,4 +85,4 @@ class LogErrorRepository implements LogErrorRepositoryInterface
     {
         return $this->delete($this->getById($entityId));
     }
-} 
+}

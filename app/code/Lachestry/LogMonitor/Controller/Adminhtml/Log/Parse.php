@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\LogMonitor\Controller\Adminhtml\Log;
@@ -42,4 +43,4 @@ class Parse extends Action
             ]);
         }
     }
-} 
+}

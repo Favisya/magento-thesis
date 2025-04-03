@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\LogMonitor\Model\Source;
@@ -20,4 +21,4 @@ class SeverityOptions implements OptionSourceInterface
             ['value' => 'emergency', 'label' => __('Emergency')]
         ];
     }
-} 
+}

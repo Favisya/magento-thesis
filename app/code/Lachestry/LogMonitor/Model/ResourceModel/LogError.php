@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\LogMonitor\Model\ResourceModel;
@@ -11,4 +12,4 @@ class LogError extends AbstractDb
     {
         $this->_init('lachestry_log_errors', 'entity_id');
     }
-} 
+}

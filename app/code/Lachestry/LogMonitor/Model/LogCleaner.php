@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\LogMonitor\Model;
@@ -53,4 +54,4 @@ class LogCleaner
             return 0;
         }
     }
-} 
+}

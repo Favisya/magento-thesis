@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\LogMonitor\Api;
@@ -20,4 +21,4 @@ interface LogErrorRepositoryInterface
     public function delete(LogErrorInterface $logError): bool;
     
     public function deleteById(int $entityId): bool;
-} 
+}

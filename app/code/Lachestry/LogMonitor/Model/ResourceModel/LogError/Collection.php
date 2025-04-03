@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\LogMonitor\Model\ResourceModel\LogError;
@@ -15,4 +16,4 @@ class Collection extends AbstractCollection
     {
         $this->_init(LogError::class, LogErrorResource::class);
     }
-} 
+}

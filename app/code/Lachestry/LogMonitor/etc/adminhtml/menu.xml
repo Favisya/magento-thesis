@@ -1,30 +1,52 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Lachestry_LogMonitor::logs" 
-             title="Log Monitor" 
-             translate="title" 
-             module="Lachestry_LogMonitor" 
-             sortOrder="100" 
-             parent="Magento_Backend::system_tools" 
-             resource="Lachestry_LogMonitor::logs"/>
-            
-        <add id="Lachestry_LogMonitor::log_errors" 
-             title="Log Errors" 
-             translate="title" 
-             module="Lachestry_LogMonitor" 
-             sortOrder="10" 
-             parent="Lachestry_LogMonitor::logs" 
-             action="log_monitor/log/index" 
-             resource="Lachestry_LogMonitor::log_view"/>
-             
-        <add id="Lachestry_LogMonitor::log_chart" 
-             title="Log Errors Chart" 
-             translate="title" 
-             module="Lachestry_LogMonitor" 
-             sortOrder="20" 
-             parent="Lachestry_LogMonitor::logs" 
-             action="log_monitor/log/chart" 
-             resource="Lachestry_LogMonitor::log_view"/>
+        <add id="Lachestry_LogMonitor::log_monitor"
+             title="Log Monitor"
+             translate="title"
+             module="Lachestry_LogMonitor"
+             sortOrder="10"
+             parent="Lachestry_Base::menu"
+             resource="Lachestry_LogMonitor::log_monitor"/>
+        <add id="Lachestry_LogMonitor::log_list"
+             title="Log Monitor"
+             translate="title"
+             module="Lachestry_LogMonitor"
+             sortOrder="10"
+             parent="Lachestry_LogMonitor::log_monitor"
+             action="log_monitor/log/index"
+             resource="Lachestry_LogMonitor::log_monitor"/>
+        <add id="Lachestry_LogMonitor::log_chart"
+             title="Log Chart"
+             translate="title"
+             module="Lachestry_LogMonitor"
+             sortOrder="20"
+             parent="Lachestry_LogMonitor::log_monitor"
+             action="log_monitor/log/chart"
+             resource="Lachestry_LogMonitor::log_monitor"/>
+
+        <add id="Lachestry_LogMonitor::system_log_monitor"
+             title="Log Monitor"
+             translate="title"
+             module="Lachestry_LogMonitor"
+             sortOrder="100"
+             parent="Magento_Backend::system"
+             resource="Lachestry_LogMonitor::log_monitor"/>
+        <add id="Lachestry_LogMonitor::system_log_list"
+             title="Log Monitor"
+             translate="title"
+             module="Lachestry_LogMonitor"
+             sortOrder="10"
+             parent="Lachestry_LogMonitor::system_log_monitor"
+             action="log_monitor/log/index"
+             resource="Lachestry_LogMonitor::log_monitor"/>
+        <add id="Lachestry_LogMonitor::system_log_chart"
+             title="Log Chart"
+             translate="title"
+             module="Lachestry_LogMonitor"
+             sortOrder="20"
+             parent="Lachestry_LogMonitor::system_log_monitor"
+             action="log_monitor/log/chart"
+             resource="Lachestry_LogMonitor::log_monitor"/>
     </menu>
 </config> 

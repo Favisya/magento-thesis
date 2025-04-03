@@ -1,1 +1,92 @@
- 
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">log_error_listing.log_error_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>log_errors</spinner>
+        <deps>
+            <dep>log_error_listing.log_error_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="log_error_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <updateUrl path="mui/index/render"/>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">entity_id</param>
+            </storageConfig>
+        </settings>
+        <aclResource>Lachestry_LogMonitor::log_errors</aclResource>
+        <dataProvider class="Lachestry\LogMonitor\Ui\DataProvider\LogErrorDataProvider" name="log_error_listing_data_source">
+            <settings>
+                <requestFieldName>entity_id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>false</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <filters name="listing_filters"/>
+        <paging name="listing_paging"/>
+        <exportButton name="export_button"/>
+        <columnsControls name="columns_controls"/>
+    </listingToolbar>
+    <columns name="log_errors">
+        <column name="entity_id">
+            <settings>
+                <filter>textRange</filter>
+                <dataType>number</dataType>
+                <sortable>true</sortable>
+                <sorting>desc</sorting>
+                <label translate="true">ID</label>
+            </settings>
+        </column>
+        <column name="log_file">
+            <settings>
+                <filter>text</filter>
+                <dataType>text</dataType>
+                <sortable>true</sortable>
+                <label translate="true">Log File</label>
+            </settings>
+        </column>
+        <column name="date">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <sortable>true</sortable>
+                <sorting>desc</sorting>
+                <label translate="true">Date</label>
+            </settings>
+        </column>
+        <column name="severity">
+            <settings>
+                <filter>text</filter>
+                <dataType>text</dataType>
+                <sortable>true</sortable>
+                <label translate="true">Severity</label>
+            </settings>
+        </column>
+        <column name="message">
+            <settings>
+                <filter>text</filter>
+                <dataType>text</dataType>
+                <sortable>true</sortable>
+                <label translate="true">Message</label>
+            </settings>
+        </column>
+        <column name="context">
+            <settings>
+                <filter>text</filter>
+                <dataType>text</dataType>
+                <sortable>true</sortable>
+                <label translate="true">Context</label>
+            </settings>
+        </column>
+    </columns>
+</listing>

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\LogMonitor\Block\Adminhtml;
@@ -33,4 +34,4 @@ class Chart extends Template
         
         return $this->jsonSerializer->serialize($data);
     }
-} 
+}

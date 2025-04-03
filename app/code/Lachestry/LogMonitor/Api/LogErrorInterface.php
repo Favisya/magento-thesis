@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\LogMonitor\Api;
@@ -35,4 +36,4 @@ interface LogErrorInterface
     public function getContext(): ?string;
     
     public function setContext(?string $context): self;
-} 
+}

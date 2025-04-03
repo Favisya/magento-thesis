@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\LogMonitor\Cron;
@@ -31,4 +32,4 @@ class ParseLogs
             );
         }
     }
-} 
+}

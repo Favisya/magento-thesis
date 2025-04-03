@@ -1,4 +1,5 @@
 <?php
+
 /** @var \Lachestry\LogMonitor\Block\Adminhtml\Chart $block */
 ?>
 
@@ -6,29 +7,29 @@
     <div class="log-chart-filters">
         <form id="log-chart-filters-form" class="admin__fieldset">
             <div class="admin__field">
-                <label class="admin__field-label" for="date_from"><?= $block->escapeHtml(__('From Date')) ?></label>
+                <label class="admin__field-label" for="date_from"><?= $escaper->escapeHtml(__('From Date')) ?></label>
                 <div class="admin__field-control">
-                    <input type="date" id="date_from" name="from" class="admin__control-text" value="<?= $block->escapeHtmlAttr($block->getRequest()->getParam('from')) ?>">
+                    <input type="date" id="date_from" name="from" class="admin__control-text" value="<?= $escaper->escapeHtmlAttr($block->getRequest()->getParam('from')) ?>">
                 </div>
             </div>
             
             <div class="admin__field">
-                <label class="admin__field-label" for="date_to"><?= $block->escapeHtml(__('To Date')) ?></label>
+                <label class="admin__field-label" for="date_to"><?= $escaper->escapeHtml(__('To Date')) ?></label>
                 <div class="admin__field-control">
-                    <input type="date" id="date_to" name="to" class="admin__control-text" value="<?= $block->escapeHtmlAttr($block->getRequest()->getParam('to')) ?>">
+                    <input type="date" id="date_to" name="to" class="admin__control-text" value="<?= $escaper->escapeHtmlAttr($block->getRequest()->getParam('to')) ?>">
                 </div>
             </div>
             
             <div class="admin__field">
                 <div class="admin__field-control">
-                    <button id="apply-filters" class="action-primary"><?= $block->escapeHtml(__('Apply Filters')) ?></button>
+                    <button id="apply-filters" class="action-primary"><?= $escaper->escapeHtml(__('Apply Filters')) ?></button>
                 </div>
             </div>
         </form>
     </div>
     
     <div class="log-chart">
-        <canvas id="logErrorChart" width="400" height="200"></canvas>
+        <canvas id="logErrorChart" width="800" height="400"></canvas>
     </div>
 </div>
 
@@ -45,6 +46,9 @@
 <style>
 .log-chart-container {
     margin: 20px 0;
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #e3e3e3;
 }
 
 .log-chart-filters {
@@ -63,5 +67,6 @@
     background: #fff;
     padding: 20px;
     border: 1px solid #e3e3e3;
+    min-height: 400px;
 }
 </style> 

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\LogMonitor\Model;
@@ -15,18 +16,18 @@ class LogParser
     private const LOG_FILES = [
         'system.log',
         'exception.log',
-        'debug.log'
+        'debug.log',
     ];
-    
+
     private const SEVERITY_MAP = [
-        'DEBUG' => 'debug',
-        'INFO' => 'info',
-        'NOTICE' => 'notice',
-        'WARNING' => 'warning',
-        'ERROR' => 'error',
-        'CRITICAL' => 'critical',
-        'ALERT' => 'alert',
-        'EMERGENCY' => 'emergency'
+        'DEBUG'     => 'debug',
+        'INFO'      => 'info',
+        'NOTICE'    => 'notice',
+        'WARNING'   => 'warning',
+        'ERROR'     => 'error',
+        'CRITICAL'  => 'critical',
+        'ALERT'     => 'alert',
+        'EMERGENCY' => 'emergency',
     ];
 
     private File $fileDriver;
@@ -35,25 +36,25 @@ class LogParser
     private LoggerInterface $logger;
 
     public function __construct(
-        File $fileDriver,
-        LogErrorFactory $logErrorFactory,
+        File                        $fileDriver,
+        LogErrorFactory             $logErrorFactory,
         LogErrorRepositoryInterface $logErrorRepository,
-        LoggerInterface $logger
+        LoggerInterface             $logger,
     ) {
-        $this->fileDriver = $fileDriver;
-        $this->logErrorFactory = $logErrorFactory;
+        $this->fileDriver         = $fileDriver;
+        $this->logErrorFactory    = $logErrorFactory;
         $this->logErrorRepository = $logErrorRepository;
-        $this->logger = $logger;
+        $this->logger             = $logger;
     }
 
     public function parse(): int
     {
         $totalParsed = 0;
-        
+
         foreach (self::LOG_FILES as $logFileName) {
             $totalParsed += $this->parseLogFile($logFileName);
         }
-        
+
         return $totalParsed;
     }
 
@@ -61,20 +62,20 @@ class LogParser
     {
         $parsedCount = 0;
         $logFilePath = BP . '/' . self::LOG_DIR_PATH . $logFileName;
-        
+
         try {
             if (!$this->fileDriver->isExists($logFilePath)) {
                 return 0;
             }
-            
+
             $logContent = $this->fileDriver->fileGetContents($logFilePath);
-            $lines = explode("\n", $logContent);
-            
+            $lines      = explode("\n", $logContent);
+
             foreach ($lines as $line) {
                 if (empty(trim($line))) {
                     continue;
                 }
-                
+
                 if ($this->processLogLine($line, $logFileName)) {
                     $parsedCount++;
                 }
@@ -84,7 +85,7 @@ class LogParser
                 'Failed to parse log file: ' . $logFileName . '. Error: ' . $e->getMessage()
             );
         }
-        
+
         return $parsedCount;
     }
 
@@ -94,17 +95,17 @@ class LogParser
         if (!preg_match($regex, $line, $matches)) {
             return false;
         }
-        
+
         if (count($matches) < 4) {
             return false;
         }
-        
-        $dateTime = $matches[1];
+
+        $dateTime    = $matches[1];
         $severityRaw = strtoupper($matches[2]);
-        $message = $matches[3];
-        
+        $message     = $matches[3];
+
         $severity = self::SEVERITY_MAP[$severityRaw] ?? 'info';
-        
+
         try {
             $logError = $this->logErrorFactory->create();
             $logError->setLogFile($logFileName);
@@ -112,7 +113,7 @@ class LogParser
             $logError->setSeverity($severity);
             $logError->setMessage($message);
             $logError->setContext('');
-            
+
             $this->logErrorRepository->save($logError);
             return true;
         } catch (\Exception $e) {
@@ -123,4 +124,4 @@ class LogParser
             return false;
         }
     }
-} 
+}

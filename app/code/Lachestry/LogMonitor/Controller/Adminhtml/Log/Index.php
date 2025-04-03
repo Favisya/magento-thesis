@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\LogMonitor\Controller\Adminhtml\Log;
@@ -24,7 +25,7 @@ class Index extends Action
     public function execute()
     {
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->getConfig()->getTitle()->prepend(__('Log Errors'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Log Monitor'));
         return $resultPage;
     }
-} 
+}

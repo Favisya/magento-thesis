@@ -49,16 +49,16 @@
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
         "dg/bypass-finals": "^1.4",
         "friendsofphp/php-cs-fixer": "^3.8",
+        "lachestry/m2-base": "^1",
         "lusitanian/oauth": "^0.8",
-        "magento/magento-coding-standard": "*",
+        "magento/magento-coding-standard": "^36.0",
         "magento/magento2-functional-testing-framework": "^4.2.1",
         "pdepend/pdepend": "^2.10",
         "phpmd/phpmd": "^2.12",
         "phpstan/phpstan": "^1.9",
         "phpunit/phpunit": "^9.5",
         "sebastian/phpcpd": "^6.0",
-        "symfony/finder": "^5.4",
-        "lachestry/m2-base": "^1"
+        "symfony/finder": "^5.4"
     },
     "conflict": {
         "gene/bluefoot": "*"
@@ -87,5 +87,9 @@
     ],
     "extra": {
         "magento-force": "override"
+    },
+    "scripts": {
+        "phpcs": "phpcs --standard=phpcs.xml",
+        "phpcbf": "phpcbf --standard=phpcs.xml"
     }
 }

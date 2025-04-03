@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\LogMonitor\Model;
@@ -73,4 +74,4 @@ class LogError extends AbstractModel implements LogErrorInterface
     {
         return $this->setData(self::CONTEXT, $context);
     }
-} 
+}

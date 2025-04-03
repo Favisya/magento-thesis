@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\LogMonitor\Model\ResourceModel\LogError\Grid;
@@ -77,4 +78,4 @@ class Collection extends LogErrorCollection implements SearchResultInterface
     {
         return $this;
     }
-} 
+}
