@@ -12,5 +12,25 @@
             parent="Magento_Backend::system_tools"
             resource="Lachestry_CronMonitoring::cron_monitoring"
         />
+
+        <add
+            id="Lachestry_CronMonitoring::lachestry_cron_monitoring"
+            title="Cron Processes Monitor"
+            module="Lachestry_CronMonitoring"
+            translate="title"
+            sortOrder="20"
+            parent="Lachestry_Base::menu"
+            resource="Lachestry_CronMonitoring::cron_monitoring"
+        />
+        <add
+            id="Lachestry_CronMonitoring::lachestry_cron_monitoring_index"
+            title="Cron Processes Monitor"
+            module="Lachestry_CronMonitoring"
+            translate="title"
+            sortOrder="10"
+            action="cron_monitoring/cron"
+            parent="Lachestry_CronMonitoring::lachestry_cron_monitoring"
+            resource="Lachestry_CronMonitoring::cron_monitoring"
+        />
     </menu>
 </config>

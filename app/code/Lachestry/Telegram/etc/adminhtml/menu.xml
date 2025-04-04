@@ -11,5 +11,24 @@
             parent="Magento_Backend::system_tools"
             resource="Lachestry_Telegram::telegram_chats"
         />
+        <add
+            id="Lachestry_Telegram::lachestry_telegram"
+            title="Telegram"
+            module="Lachestry_Telegram"
+            translate="title"
+            sortOrder="30"
+            parent="Lachestry_Base::menu"
+            resource="Lachestry_Telegram::telegram_chats"
+        />
+        <add
+            id="Lachestry_Telegram::lachestry_telegram_chats"
+            title="Telegram Chats"
+            module="Lachestry_Telegram"
+            translate="title"
+            sortOrder="10"
+            action="telegram/chat/index"
+            parent="Lachestry_Telegram::lachestry_telegram"
+            resource="Lachestry_Telegram::telegram_chats"
+        />
     </menu>
 </config>

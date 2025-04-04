@@ -52,11 +52,12 @@ class ProcessDataProvider extends DataProvider
 
         foreach ($processes as $process) {
             $items[] = [
-                'pid'     => $process['pid'],
-                'user'    => $process['user'],
-                'cpu'     => $process['cpu'],
-                'memory'  => $process['memory'],
-                'command' => $process['command'],
+                'pid'           => $process['pid'],
+                'user'          => $process['user'],
+                'cpu'           => $process['cpu'],
+                'memory'        => $process['memory'],
+                'execution_time'=> $process['execution_time'],
+                'command'       => $process['command'],
             ];
         }
 

@@ -15,5 +15,18 @@
              parent="Lachestry_RabbitMQMonitor::rabbitmq"
              action="rabbitmq_monitor/consumers/index"
              resource="Lachestry_RabbitMQMonitor::consumers"/>
+        <add id="Lachestry_RabbitMQMonitor::lachestry_rabbitmq"
+             title="RabbitMQ Monitor"
+             module="Lachestry_RabbitMQMonitor"
+             sortOrder="40"
+             parent="Lachestry_Base::menu"
+             resource="Lachestry_RabbitMQMonitor::rabbitmq"/>
+        <add id="Lachestry_RabbitMQMonitor::lachestry_consumers"
+             title="Consumers Status"
+             module="Lachestry_RabbitMQMonitor"
+             sortOrder="10"
+             parent="Lachestry_RabbitMQMonitor::lachestry_rabbitmq"
+             action="rabbitmq_monitor/consumers/index"
+             resource="Lachestry_RabbitMQMonitor::consumers"/>
     </menu>
 </config> 

@@ -69,6 +69,14 @@
                 <dataType>text</dataType>
             </settings>
         </column>
+        <column name="execution_time">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Execution Time (min)</label>
+                <sortable>true</sortable>
+                <dataType>number</dataType>
+            </settings>
+        </column>
         <column name="command">
             <settings>
                 <filter>textRange</filter>

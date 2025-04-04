@@ -28,15 +28,15 @@ class NotifyQueueErrors
      *
      * @param ConsumerInterface $subject
      * @param callable $proceed
-     * @param EnvelopeInterface $envelope
+     * @param EnvelopeInterface|null $envelope
      * @return void
      */
     public function aroundProcess(
         ConsumerInterface $subject,
         callable $proceed,
-        EnvelopeInterface $envelope
+        ?EnvelopeInterface $envelope = null
     ): void {
-        if (!$this->config->isQueueNotificationEnabled()) {
+        if (!$this->config->isQueueNotificationEnabled() || $envelope === null) {
             $proceed($envelope);
             return;
         }

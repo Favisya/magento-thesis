@@ -62,12 +62,26 @@ class Process extends DataObject
                 }
                 $parts = preg_split('/\s+/', trim($line));
                 if (count($parts) >= 11) {
+                    // Получаем время запуска процесса в минутах
+                    $startTime = implode(' ', array_slice($parts, 8, 2));
+                    
+                    // Рассчитываем время выполнения в минутах
+                    $executionTimeMinutes = 0;
+                    if (preg_match('/(\d+):(\d+)/', $parts[9], $matches)) {
+                        // Если формат ЧЧ:ММ, конвертируем в минуты
+                        $executionTimeMinutes = (int)$matches[1] * 60 + (int)$matches[2];
+                    } elseif (preg_match('/(\d+)-(\d+):(\d+)/', $startTime, $matches)) {
+                        // Если формат ДД-ЧЧ:ММ (для долгих процессов)
+                        $executionTimeMinutes = (int)$matches[1] * 24 * 60 + (int)$matches[2] * 60 + (int)$matches[3];
+                    }
+                    
                     $processes[] = [
-                        'pid'     => $parts[1],
-                        'user'    => $parts[0],
-                        'cpu'     => $parts[2],
-                        'memory'  => $parts[3],
-                        'command' => implode(' ', array_slice($parts, 10)),
+                        'pid'           => $parts[1],
+                        'user'          => $parts[0],
+                        'cpu'           => $parts[2],
+                        'memory'        => $parts[3],
+                        'execution_time'=> $executionTimeMinutes,
+                        'command'       => implode(' ', array_slice($parts, 10)),
                     ];
                 }
             }

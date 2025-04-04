@@ -35,6 +35,33 @@
         <exportButton name="export_button"/>
         <columnsControls name="columns_controls"/>
         <paging name="listing_paging"/>
+        <massaction name="listing_massaction">
+            <action name="delete">
+                <settings>
+                    <confirm>
+                        <message translate="true">Вы уверены, что хотите удалить выбранные чаты?</message>
+                        <title translate="true">Удаление чатов</title>
+                    </confirm>
+                    <url path="*/*/massDelete"/>
+                    <type>delete</type>
+                    <label translate="true">Удалить</label>
+                </settings>
+            </action>
+            <action name="enable">
+                <settings>
+                    <url path="*/*/massEnable"/>
+                    <type>enable</type>
+                    <label translate="true">Включить</label>
+                </settings>
+            </action>
+            <action name="disable">
+                <settings>
+                    <url path="*/*/massDisable"/>
+                    <type>disable</type>
+                    <label translate="true">Выключить</label>
+                </settings>
+            </action>
+        </massaction>
     </listingToolbar>
 
     <columns name="telegram_chat_columns">
