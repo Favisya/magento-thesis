@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "417c1c027ebbb7acf2d0ab1d2b87582c",
+    "content-hash": "b084c4e7fcea4351f54eb0f6e7b87f6d",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -17799,6 +17799,155 @@
             "time": "2024-12-18T14:59:28+00:00"
         },
         {
+            "name": "mageplaza/magento-2-russian-language-pack",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mageplaza/magento-2-russian-language-pack.git",
+                "reference": "4ea4890547a67ddc3cebd8135ae416277e09314e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mageplaza/magento-2-russian-language-pack/zipball/4ea4890547a67ddc3cebd8135ae416277e09314e",
+                "reference": "4ea4890547a67ddc3cebd8135ae416277e09314e",
+                "shasum": ""
+            },
+            "require": {
+                "mageplaza/module-core": "^1.3.13"
+            },
+            "default-branch": true,
+            "type": "magento2-language",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mageplaza team",
+                    "email": "hi@mageplaza.com",
+                    "homepage": "https://www.mageplaza.com",
+                    "role": "Leader"
+                }
+            ],
+            "description": "Russian language package for Magento 2",
+            "homepage": "https://www.mageplaza.com",
+            "support": {
+                "issues": "https://github.com/mageplaza/magento-2-russian-language-pack/issues",
+                "source": "https://github.com/mageplaza/magento-2-russian-language-pack/tree/master"
+            },
+            "time": "2023-04-28T09:25:10+00:00"
+        },
+        {
+            "name": "mageplaza/module-core",
+            "version": "1.5.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mageplaza/module-core.git",
+                "reference": "8ebf0f2fc27e16774664ad7b4195ca969c3fc9d2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mageplaza/module-core/zipball/8ebf0f2fc27e16774664ad7b4195ca969c3fc9d2",
+                "reference": "8ebf0f2fc27e16774664ad7b4195ca969c3fc9d2",
+                "shasum": ""
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Mageplaza\\Core\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Mageplaza",
+                    "email": "support@mageplaza.com",
+                    "homepage": "https://www.mageplaza.com",
+                    "role": "Technical Support"
+                }
+            ],
+            "description": "Mageplaza Core for Magento 2",
+            "support": {
+                "source": "https://github.com/mageplaza/module-core/tree/v1.5.12"
+            },
+            "time": "2025-03-04T07:01:17+00:00"
+        },
+        {
+            "name": "mageplaza/module-smtp",
+            "version": "4.7.14",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mageplaza/magento-2-smtp.git",
+                "reference": "68ad9f59ff064492bb067a01791c1794922c5b93"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mageplaza/magento-2-smtp/zipball/68ad9f59ff064492bb067a01791c1794922c5b93",
+                "reference": "68ad9f59ff064492bb067a01791c1794922c5b93",
+                "shasum": ""
+            },
+            "require": {
+                "mageplaza/module-core": "^1.5.9"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Mageplaza\\Smtp\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Mageplaza",
+                    "email": "support@mageplaza.com",
+                    "homepage": "https://www.mageplaza.com",
+                    "role": "Technical Support"
+                }
+            ],
+            "description": "SMTP Extension for Magento 2 helps the owner of store simply install SMTP (Simple Mail Transfer Protocol) server which transmits the messages into codes or numbers",
+            "keywords": [
+                "Facebook ADS",
+                "Marketing Automation",
+                "Messenger",
+                "email",
+                "email marketing",
+                "email settings",
+                "facebook",
+                "gmail smtp",
+                "google ads",
+                "magento 2",
+                "magento 2 smtp",
+                "magento smtp",
+                "mageplaza",
+                "sms",
+                "sms marketing",
+                "smtp",
+                "web push notification",
+                "whatsapp"
+            ],
+            "support": {
+                "source": "https://github.com/mageplaza/magento-2-smtp/tree/v4.7.14"
+            },
+            "time": "2024-12-03T06:30:24+00:00"
+        },
+        {
             "name": "monolog/monolog",
             "version": "2.10.0",
             "source": {
@@ -27861,7 +28010,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "mageplaza/magento-2-russian-language-pack": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": [],

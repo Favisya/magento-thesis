@@ -21,7 +21,9 @@
         "magento/composer-dependency-version-audit-plugin": "~0.1",
         "magento/composer-root-update-plugin": "~2.0",
         "magento/module-elasticsearch-7": "*",
-        "magento/product-community-edition": "2.4.6"
+        "magento/product-community-edition": "2.4.6",
+        "mageplaza/magento-2-russian-language-pack": "dev-master",
+        "mageplaza/module-smtp": "^4.7"
     },
     "autoload": {
         "exclude-from-classmap": [
