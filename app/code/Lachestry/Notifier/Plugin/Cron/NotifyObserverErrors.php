@@ -50,7 +50,6 @@ class NotifyObserverErrors
                     'action'   => 'execute'
                 ]);
             } catch (\Throwable $e) {
-                // Do nothing to avoid interrupting the main process
             }
             
             throw $exception;

@@ -63,16 +63,12 @@ class Process extends DataObject
                 }
                 $parts = preg_split('/\s+/', trim($line));
                 if (count($parts) >= 11) {
-                    // Получаем время запуска процесса в минутах
                     $startTime = implode(' ', array_slice($parts, 8, 2));
                     
-                    // Рассчитываем время выполнения в минутах
                     $executionTimeMinutes = 0;
                     if (preg_match('/(\d+):(\d+)/', $parts[9], $matches)) {
-                        // Если формат ЧЧ:ММ, конвертируем в минуты
                         $executionTimeMinutes = (int)$matches[1] * 60 + (int)$matches[2];
                     } elseif (preg_match('/(\d+)-(\d+):(\d+)/', $startTime, $matches)) {
-                        // Если формат ДД-ЧЧ:ММ (для долгих процессов)
                         $executionTimeMinutes = (int)$matches[1] * 24 * 60 + (int)$matches[2] * 60 + (int)$matches[3];
                     }
                     
@@ -87,7 +83,6 @@ class Process extends DataObject
                 }
             }
         } catch (\Exception $e) {
-            // Логирование ошибки можно добавить здесь при необходимости
         }
 
         return $processes;

@@ -57,10 +57,8 @@ class ConsumerActivityManager
      */
     public function updateStatus(): void
     {
-        // Получаем информацию о запущенных процессах консьюмеров
         $runningConsumers = $this->getRunningConsumersFromProcesses();
         
-        // Получаем список всех консьюмеров из конфигурации
         $configuredConsumers = $this->getAllConfiguredConsumers();
         
         foreach ($configuredConsumers as $consumerName) {
@@ -95,14 +93,12 @@ class ConsumerActivityManager
         
         if ($pid) {
             $consumer->setPid($pid);
-            // Обновляем время последней активности только если процесс запущен
             $consumer->setLastActivity(date('Y-m-d H:i:s'));
         }
         
         try {
             $this->consumerActivityResource->save($consumer);
         } catch (\Exception $e) {
-            // Log error
         }
     }
     
@@ -115,10 +111,8 @@ class ConsumerActivityManager
     {
         $runningConsumers = [];
         
-        // Проверяем PID файлы
         $this->checkPidFiles($runningConsumers);
         
-        // Проверяем запущенные процессы
         $this->checkRunningProcesses($runningConsumers);
         
         return $runningConsumers;
@@ -188,7 +182,6 @@ class ConsumerActivityManager
                 }
             }
         } catch (LocalizedException $e) {
-            // Ошибки выполнения команды игнорируем
         }
     }
     
@@ -221,12 +214,10 @@ class ConsumerActivityManager
     {
         $consumers = [];
         
-        // Получаем консьюмеры из конфигурации
         foreach ($this->consumerConfig->getConsumers() as $consumer) {
             $consumers[] = $consumer->getName();
         }
         
-        // Получаем консьюмеры из cron_consumers_runner конфигурации
         $cronConsumers = $this->deploymentConfig->get('cron_consumers_runner/consumers');
         if (is_array($cronConsumers) && !empty($cronConsumers)) {
             foreach ($cronConsumers as $consumerName) {

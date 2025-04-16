@@ -53,7 +53,6 @@ class NotifyApiErrors
                 $this->errorHandler->handleError($exception, 'rest_api', $additionalData);
             }
         } catch (\Throwable $e) {
-            // Do nothing to avoid interrupting the main process
         }
         
         return $exception;

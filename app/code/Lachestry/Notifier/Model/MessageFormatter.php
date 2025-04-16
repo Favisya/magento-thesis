@@ -67,14 +67,11 @@ class MessageFormatter
         $message .= "⏰ " . date('Y-m-d H:i:s') . "\n";
         $message .= "🔍 Source: $source\n";
 
-        // Add source-specific information
         $message .= $formatter->format($additionalData);
 
-        // Add exception details
         $message .= "❗ Error: " . $exception->getMessage() . "\n";
         $message .= "⚠️ File: " . $exception->getFile() . " (line " . $exception->getLine() . ")\n";
 
-        // Add stack trace
         $trace      = explode("\n", $exception->getTraceAsString());
         $traceShort = array_slice($trace, 0, 3);
         $message    .= "🔍 Stack trace:\n```" . implode("\n", $traceShort) . "```\n";

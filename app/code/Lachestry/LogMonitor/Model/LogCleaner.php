@@ -11,7 +11,7 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 
 class LogCleaner
 {
-    private const LOGS_RETENTION_PERIOD = 90; // дней (3 месяца)
+    private const LOGS_RETENTION_PERIOD = 90;
     
     private CollectionFactory $collectionFactory;
     private LoggerInterface $logger;

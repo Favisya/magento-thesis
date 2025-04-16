@@ -142,7 +142,6 @@ class TestQueueMessage extends Command
         try {
             $this->appState->setAreaCode('global');
         } catch (LocalizedException $e) {
-            // Область может быть уже установлена
         }
         
         if ($input->getOption(self::OPTION_LIST_TOPICS)) {
@@ -155,7 +154,7 @@ class TestQueueMessage extends Command
         
         if (!$topic && !$consumerName) {
             $output->writeln(
-                '<error>You must specify either a topic name or a consumer name</error>'
+                '<e>You must specify either a topic name or a consumer name</e>'
             );
             $output->writeln(
                 '<info>Use the --list-topics option to see available topics and consumers</info>'
@@ -168,7 +167,7 @@ class TestQueueMessage extends Command
             
             if (!$topic) {
                 $output->writeln(
-                    "<error>Could not find topic for consumer '{$consumerName}'</error>"
+                    "<e>Could not find topic for consumer '{$consumerName}'</e>"
                 );
                 $output->writeln(
                     '<info>Use the --list-topics option to see available topics and consumers</info>'
@@ -187,11 +186,9 @@ class TestQueueMessage extends Command
         $metaInfo = $input->getOption(self::OPTION_META_INFO);
         
         try {
-            // Пытаемся определить требуемый тип сообщения для топика
             $messageType = $this->getRequiredMessageType($topic);
             $output->writeln("<info>Detected required message type: {$messageType}</info>");
             
-            // Готовим сообщение в зависимости от типа
             $processedMessage = $this->prepareMessageForTopic(
                 $topic,
                 $message,
@@ -206,7 +203,6 @@ class TestQueueMessage extends Command
                 "<info>Message sent successfully to topic '{$topic}'</info>"
             );
             
-            // Выводим информацию о сообщении
             $output->writeln("<info>Message type: " . gettype($processedMessage) . "</info>");
             if (is_object($processedMessage)) {
                 $output->writeln("<info>Message class: " . get_class($processedMessage) . "</info>");
@@ -215,7 +211,7 @@ class TestQueueMessage extends Command
             return Cli::RETURN_SUCCESS;
         } catch (\Exception $e) {
             $output->writeln(
-                "<error>Error sending message to topic '{$topic}': " . $e->getMessage() . "</error>"
+                "<e>Error sending message to topic '{$topic}': " . $e->getMessage() . "</e>"
             );
             return Cli::RETURN_FAILURE;
         }
@@ -230,7 +226,6 @@ class TestQueueMessage extends Command
                 $this->typeProcessor = $objectManager->get(TypeProcessor::class);
             }
             
-            // Для асинхронных операций и product_action_attribute
             if (            strpos($topic, 'async.') === 0 ||
                 strpos($topic, 'async.V1.') === 0 ||
                 strpos($topic, 'product_action_attribute.') === 0
@@ -238,7 +233,6 @@ class TestQueueMessage extends Command
                 return \Magento\AsynchronousOperations\Api\Data\OperationInterface::class;
             }
             
-            // Получаем информацию о топике из валидатора сообщений
             $property = new \ReflectionProperty($this->messageValidator, 'topicMessageMapping');
             $property->setAccessible(true);
             $topicMessageMapping = $property->getValue($this->messageValidator);
@@ -261,14 +255,12 @@ class TestQueueMessage extends Command
         $metaInfo,
         ?string $messageType
     ) {
-        // Обрабатываем асинхронные операции
         if (            $messageType === \Magento\AsynchronousOperations\Api\Data\OperationInterface::class
             || is_subclass_of($messageType, \Magento\AsynchronousOperations\Api\Data\OperationInterface::class)
         ) {
             return $this->createAsyncOperationMessage($topic, $message, $entityId, $metaInfo);
         }
         
-        // Для обычных сообщений используем стандартную обработку
         return $this->processMessage($message, $contentType);
     }
     
@@ -281,7 +273,6 @@ class TestQueueMessage extends Command
             $this->identityService = $objectManager->get(IdentityGeneratorInterface::class);
         }
         
-        // Формируем метаданные операции
         try {
             $metaInfoArray = json_decode($metaInfo, true);
         } catch (\Exception $e) {
@@ -292,22 +283,18 @@ class TestQueueMessage extends Command
             $metaInfoArray = [];
         }
         
-        // Создаем идентификаторы для операции и пакета
         $operationId = $this->identityService->generateId();
         $bulkUuid = $this->identityService->generateId();
         
-        // Формируем данные для операции
         if (is_string($message) && json_decode($message) === null) {
             $serializedData = $this->serializer->serialize([
                 'entity_id' => $entityId,
                 'message' => $message
             ]);
         } else {
-            // Если передали JSON, используем его
             $serializedData = is_string($message) ? $message : $this->serializer->serialize($message);
         }
         
-        // Создаем объект операции
         $operation = $this->operationFactory->create();
         $operation->setBulkUuid($bulkUuid)
             ->setTopicName($topic)
@@ -317,7 +304,6 @@ class TestQueueMessage extends Command
             ->setResultMessage('')
             ->setErrorCode(null);
         
-        // Создаем метаданные для операции, если не указаны
         if (!isset($metaInfoArray['user_id'])) {
             $metaInfoArray['user_id'] = UserContextInterface::USER_TYPE_ADMIN;
         }
@@ -325,7 +311,6 @@ class TestQueueMessage extends Command
             $metaInfoArray['meta_information'] = 'Test operation created by RabbitMQ Monitor extension';
         }
         
-        // Устанавливаем метаданные
         $operation->setMetadata($this->serializer->serialize($metaInfoArray));
         
         return $operation;

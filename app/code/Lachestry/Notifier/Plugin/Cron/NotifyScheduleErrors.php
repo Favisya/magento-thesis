@@ -51,7 +51,6 @@ class NotifyScheduleErrors
                     'status'       => $status
                 ]);
             } catch (\Throwable $e) {
-                // Do nothing to avoid interrupting the main process
             }
         }
         
