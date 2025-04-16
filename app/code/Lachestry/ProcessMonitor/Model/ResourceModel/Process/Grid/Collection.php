@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\ProcessMonitor\Model\ResourceModel\Process\Grid;
@@ -51,4 +52,4 @@ class Collection extends SearchResult
         }
         return $this;
     }
-} 
+}

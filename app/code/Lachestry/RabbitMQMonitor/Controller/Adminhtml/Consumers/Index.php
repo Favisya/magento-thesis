@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\RabbitMQMonitor\Controller\Adminhtml\Consumers;
@@ -30,4 +31,4 @@ class Index extends Action
     {
         return $this->_authorization->isAllowed('Lachestry_RabbitMQMonitor::consumers');
     }
-} 
+}

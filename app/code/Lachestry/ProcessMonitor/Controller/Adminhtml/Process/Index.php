@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\ProcessMonitor\Controller\Adminhtml\Process;
@@ -64,4 +65,4 @@ class Index extends Action
     {
         return $this->_authorization->isAllowed('Lachestry_ProcessMonitor::process_list_view');
     }
-} 
+}

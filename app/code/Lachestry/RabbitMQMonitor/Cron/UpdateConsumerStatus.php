@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\RabbitMQMonitor\Cron;
@@ -27,4 +28,4 @@ class UpdateConsumerStatus
             $this->logger->error('Ошибка при обновлении статуса консьюмеров: ' . $e->getMessage());
         }
     }
-} 
+}

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\Notifier\Plugin\Cron;
@@ -55,4 +56,4 @@ class NotifyObserverErrors
             throw $exception;
         }
     }
-} 
+}

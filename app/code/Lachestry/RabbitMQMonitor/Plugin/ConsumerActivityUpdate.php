@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\RabbitMQMonitor\Plugin;
@@ -46,9 +47,9 @@ class ConsumerActivityUpdate
         $stackTrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
         
         foreach ($stackTrace as $trace) {
-            if (isset($trace['class']) && 
-                $trace['class'] === 'Magento\Framework\MessageQueue\Consumer\ConfigInterface' && 
-                isset($trace['object']) && 
+            if (            isset($trace['class']) &&
+                $trace['class'] === 'Magento\Framework\MessageQueue\Consumer\ConfigInterface' &&
+                isset($trace['object']) &&
                 method_exists($trace['object'], 'getName')
             ) {
                 return $trace['object']->getName();

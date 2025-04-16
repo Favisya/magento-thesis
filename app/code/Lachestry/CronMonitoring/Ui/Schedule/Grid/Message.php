@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\CronMonitoring\Ui\Schedule\Grid;
@@ -19,8 +20,8 @@ class Message extends Column
         UiComponentFactory $uiComponentFactory,
         MessageBlock $messageBlock,
         array $components = [],
-        array $data = [])
-    {
+        array $data = []
+    ) {
         $this->messageBlock = $messageBlock;
         parent::__construct(
             $context,

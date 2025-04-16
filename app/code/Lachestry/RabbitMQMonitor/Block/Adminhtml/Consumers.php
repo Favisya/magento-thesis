@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\RabbitMQMonitor\Block\Adminhtml;
@@ -75,7 +76,7 @@ class Consumers extends Template
             $result[] = $consumerData;
         }
         
-        usort($result, function($a, $b) {
+        usort($result, function ($a, $b) {
             return strcmp($a['name'], $b['name']);
         });
         
@@ -83,7 +84,7 @@ class Consumers extends Template
     }
     
     protected function determineConsumerStatus(
-        string $consumerName, 
+        string $consumerName,
         bool $isRunning,
         bool $isAllowed
     ): string {

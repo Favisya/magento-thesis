@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\Telegram\Cron;
@@ -19,7 +20,8 @@ class BotUpdatesCollect
         protected readonly LoggerInterface $logger,
         protected readonly TgChatResource $telegramChatResource,
         protected readonly NotificationInterface $notificationProvider,
-    ) {}
+    ) {
+    }
 
     public function execute(): void
     {

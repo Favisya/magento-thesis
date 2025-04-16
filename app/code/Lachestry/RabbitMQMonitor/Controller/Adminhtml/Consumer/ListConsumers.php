@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\RabbitMQMonitor\Controller\Adminhtml\Consumer;
@@ -53,7 +54,7 @@ class ListConsumers extends Action
             
             $phpPath = 'php';
             
-            $command = $phpPath . ' ' . $rootDir . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'magento ' 
+            $command = $phpPath . ' ' . $rootDir . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'magento '
                 . 'queue:consumers:list';
                 
             $output = $this->shell->execute($command);
@@ -98,4 +99,4 @@ class ListConsumers extends Action
     {
         return $this->_authorization->isAllowed('Lachestry_RabbitMQMonitor::monitor');
     }
-} 
+}

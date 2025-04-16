@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\RabbitMQMonitor\Console\Command;
@@ -192,11 +193,11 @@ class TestQueueMessage extends Command
             
             // Готовим сообщение в зависимости от типа
             $processedMessage = $this->prepareMessageForTopic(
-                $topic, 
-                $message, 
-                $contentType, 
-                $entityId, 
-                $metaInfo, 
+                $topic,
+                $message,
+                $contentType,
+                $entityId,
+                $metaInfo,
                 $messageType
             );
             
@@ -230,9 +231,10 @@ class TestQueueMessage extends Command
             }
             
             // Для асинхронных операций и product_action_attribute
-            if (strpos($topic, 'async.') === 0 || 
-                strpos($topic, 'async.V1.') === 0 || 
-                strpos($topic, 'product_action_attribute.') === 0) {
+            if (            strpos($topic, 'async.') === 0 ||
+                strpos($topic, 'async.V1.') === 0 ||
+                strpos($topic, 'product_action_attribute.') === 0
+            ) {
                 return \Magento\AsynchronousOperations\Api\Data\OperationInterface::class;
             }
             
@@ -252,16 +254,17 @@ class TestQueueMessage extends Command
     }
     
     protected function prepareMessageForTopic(
-        string $topic, 
-        $message, 
-        string $contentType, 
-        $entityId, 
-        $metaInfo, 
+        string $topic,
+        $message,
+        string $contentType,
+        $entityId,
+        $metaInfo,
         ?string $messageType
     ) {
         // Обрабатываем асинхронные операции
-        if ($messageType === \Magento\AsynchronousOperations\Api\Data\OperationInterface::class
-            || is_subclass_of($messageType, \Magento\AsynchronousOperations\Api\Data\OperationInterface::class)) {
+        if (            $messageType === \Magento\AsynchronousOperations\Api\Data\OperationInterface::class
+            || is_subclass_of($messageType, \Magento\AsynchronousOperations\Api\Data\OperationInterface::class)
+        ) {
             return $this->createAsyncOperationMessage($topic, $message, $entityId, $metaInfo);
         }
         
@@ -387,17 +390,20 @@ class TestQueueMessage extends Command
     {
         $crontabConsumersConfig = $this->deploymentConfig->get('crontab') ?? [];
         foreach ($crontabConsumersConfig as $jobCode => $jobConfig) {
-            if (isset($jobConfig['instance'], $jobConfig['method']) && 
-                $jobConfig['instance'] === 'Magento\MessageQueue\Model\Cron\ConsumersRunner' && 
-                $jobConfig['method'] === 'run') {
-                
-                if (isset($jobConfig['arguments']['consumerId']['value']) && 
-                    $jobConfig['arguments']['consumerId']['value'] === $handler) {
-                    
-                    if (isset($jobConfig['arguments']['consumerOptions']['value']) && 
-                        isset($jobConfig['arguments']['consumerOptions']['value']['topics']) && 
-                        !empty($jobConfig['arguments']['consumerOptions']['value']['topics'])) {
-                        
+            if (
+            isset($jobConfig['instance'], $jobConfig['method']) &&
+                $jobConfig['instance'] === 'Magento\MessageQueue\Model\Cron\ConsumersRunner' &&
+                $jobConfig['method'] === 'run'
+            ) {
+                if (
+                isset($jobConfig['arguments']['consumerId']['value']) &&
+                    $jobConfig['arguments']['consumerId']['value'] === $handler
+                ) {
+                    if (
+                    isset($jobConfig['arguments']['consumerOptions']['value']) &&
+                        isset($jobConfig['arguments']['consumerOptions']['value']['topics']) &&
+                        !empty($jobConfig['arguments']['consumerOptions']['value']['topics'])
+                    ) {
                         return $jobConfig['arguments']['consumerOptions']['value']['topics'][0];
                     }
                 }
@@ -416,4 +422,4 @@ class TestQueueMessage extends Command
     {
         return $this->topicList->getConsumerTopicMap();
     }
-} 
+}

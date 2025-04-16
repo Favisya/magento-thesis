@@ -7,7 +7,7 @@
             <div class="page-actions">
                 <div class="page-actions-buttons">
                     <button id="refresh-status" class="action-default scalable" type="button">
-                        <span><?= $block->escapeHtml(__('Refresh Status')) ?></span>
+                        <span><?= $escaper->escapeHtml(__('Refresh Status')) ?></span>
                     </button>
                 </div>
             </div>
@@ -18,22 +18,22 @@
     <table class="data-grid">
         <thead>
             <tr>
-                <th class="data-grid-th"><?= $block->escapeHtml(__('Consumer Name')) ?></th>
-                <th class="data-grid-th"><?= $block->escapeHtml(__('Connection')) ?></th>
-                <th class="data-grid-th"><?= $block->escapeHtml(__('Queue')) ?></th>
-                <th class="data-grid-th"><?= $block->escapeHtml(__('Topic')) ?></th>
-                <th class="data-grid-th"><?= $block->escapeHtml(__('Status')) ?></th>
-                <th class="data-grid-th"><?= $block->escapeHtml(__('PID')) ?></th>
-                <th class="data-grid-th"><?= $block->escapeHtml(__('Last Activity')) ?></th>
+                <th class="data-grid-th"><?= $escaper->escapeHtml(__('Consumer Name')) ?></th>
+                <th class="data-grid-th"><?= $escaper->escapeHtml(__('Connection')) ?></th>
+                <th class="data-grid-th"><?= $escaper->escapeHtml(__('Queue')) ?></th>
+                <th class="data-grid-th"><?= $escaper->escapeHtml(__('Topic')) ?></th>
+                <th class="data-grid-th"><?= $escaper->escapeHtml(__('Status')) ?></th>
+                <th class="data-grid-th"><?= $escaper->escapeHtml(__('PID')) ?></th>
+                <th class="data-grid-th"><?= $escaper->escapeHtml(__('Last Activity')) ?></th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($block->getConsumers() as $consumer): ?>
                 <tr>
-                    <td><?= $block->escapeHtml($consumer['name']) ?></td>
-                    <td><?= $block->escapeHtml($consumer['connection']) ?></td>
-                    <td><?= $block->escapeHtml($consumer['queue']) ?></td>
-                    <td><?= $block->escapeHtml($consumer['topic']) ?></td>
+                    <td><?= $escaper->escapeHtml($consumer['name']) ?></td>
+                    <td><?= $escaper->escapeHtml($consumer['connection']) ?></td>
+                    <td><?= $escaper->escapeHtml($consumer['queue']) ?></td>
+                    <td><?= $escaper->escapeHtml($consumer['topic']) ?></td>
                     <td>
                         <?php
                         $severityClass = 'critical';
@@ -44,11 +44,11 @@
                         }
                         ?>
                         <span class="grid-severity-<?= $severityClass ?>">
-                            <span><?= $block->escapeHtml($consumer['status']) ?></span>
+                            <span><?= $escaper->escapeHtml($consumer['status']) ?></span>
                         </span>
                     </td>
-                    <td><?= $block->escapeHtml($consumer['pid'] ?? '-') ?></td>
-                    <td><?= $block->escapeHtml($consumer['last_activity'] ?? '-') ?></td>
+                    <td><?= $escaper->escapeHtml($consumer['pid'] ?? '-') ?></td>
+                    <td><?= $escaper->escapeHtml($consumer['last_activity'] ?? '-') ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>

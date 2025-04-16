@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\Notifier\Model\Formatter;
@@ -30,4 +31,4 @@ class IndexerFormatter extends AbstractSourceFormatter
         
         return $info;
     }
-} 
+}

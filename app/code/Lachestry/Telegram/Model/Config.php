@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\Telegram\Model;
@@ -18,7 +19,8 @@ class Config
 
     public function __construct(
         protected readonly ScopeConfigInterface $scopeConfig,
-    ) {}
+    ) {
+    }
 
     public function isEnabled(): bool
     {

@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\CronMonitoring\Model\ResourceModel\GroupSchedule;
 
 use Lachestry\Cron\Model\ResourceModel\JobCodes;
 use Magento\Cron\Model\ResourceModel\Schedule\Collection as ScheduleCollection;
-use \Lachestry\Cron\Model\ResourceModel\JobCodes\Collection as JobCodesCollection;
+use Lachestry\Cron\Model\ResourceModel\JobCodes\Collection as JobCodesCollection;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Lachestry\CronMonitoring\Model\ResourceModel\GroupSchedule;

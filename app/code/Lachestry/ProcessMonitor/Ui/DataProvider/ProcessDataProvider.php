@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\ProcessMonitor\Ui\DataProvider;
@@ -56,7 +57,7 @@ class ProcessDataProvider extends DataProvider
                 'user'          => $process['user'],
                 'cpu'           => $process['cpu'],
                 'memory'        => $process['memory'],
-                'execution_time'=> $process['execution_time'],
+                'execution_time' => $process['execution_time'],
                 'command'       => $process['command'],
             ];
         }

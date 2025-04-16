@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\RabbitMQMonitor\Model;
@@ -107,9 +108,9 @@ class TopicList
             $connection = $this->resourceConnection->getConnection();
             $tableNames = $connection->listTables();
             
-            if (in_array($this->resourceConnection->getTableName('queue_consumer_link'), $tableNames) && 
-                in_array($this->resourceConnection->getTableName('queue_topic'), $tableNames)) {
-                
+            if (            in_array($this->resourceConnection->getTableName('queue_consumer_link'), $tableNames) &&
+                in_array($this->resourceConnection->getTableName('queue_topic'), $tableNames)
+            ) {
                 $queueConsumerLinkTable = $this->resourceConnection->getTableName('queue_consumer_link');
                 $queueTopicTable = $this->resourceConnection->getTableName('queue_topic');
                 

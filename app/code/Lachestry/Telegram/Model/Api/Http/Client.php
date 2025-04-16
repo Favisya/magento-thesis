@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\Telegram\Model\Api\Http;
@@ -15,7 +16,8 @@ class Client
         protected readonly CurlFactory $clientFactory,
         protected readonly Json $jsonSerializer,
         protected readonly LoggerInterface $logger,
-    ) {}
+    ) {
+    }
 
     public function request(string $url, string $method = 'GET', $rawData = null): array
     {
@@ -29,7 +31,7 @@ class Client
                 $client->post($url, $rawData);
             }
 
-            if ($method == 'GET' ) {
+            if ($method == 'GET') {
                 $client->get($url);
             }
 

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\Notifier\Api\Formatter;
@@ -22,4 +23,4 @@ interface SourceFormatterInterface
      * @return string
      */
     public function getTitle(): string;
-} 
+}

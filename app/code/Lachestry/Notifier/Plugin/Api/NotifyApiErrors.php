@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\Notifier\Plugin\Api;
@@ -45,7 +46,7 @@ class NotifyApiErrors
                 $additionalData['http_code'] = $exception->getHttpCode();
             }
             
-            $isClientError = $exception instanceof WebapiException && 
+            $isClientError = $exception instanceof WebapiException &&
                             ($exception->getHttpCode() >= 400 && $exception->getHttpCode() < 500);
                             
             if (!$isClientError) {
@@ -57,4 +58,4 @@ class NotifyApiErrors
         
         return $exception;
     }
-} 
+}

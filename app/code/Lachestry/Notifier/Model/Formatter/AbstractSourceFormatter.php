@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\Notifier\Model\Formatter;
@@ -22,4 +23,4 @@ abstract class AbstractSourceFormatter implements SourceFormatterInterface
     {
         return $this->title;
     }
-} 
+}

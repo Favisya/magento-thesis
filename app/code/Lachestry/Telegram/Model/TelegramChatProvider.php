@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\Telegram\Model;
@@ -11,7 +12,8 @@ class TelegramChatProvider
 {
     public function __construct(
         protected readonly CollectionFactory $collectionFactory,
-    ) {}
+    ) {
+    }
 
     /**
      * @return TelegramChat[]

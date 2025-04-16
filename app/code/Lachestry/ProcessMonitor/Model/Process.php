@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\ProcessMonitor\Model;
@@ -80,7 +81,7 @@ class Process extends DataObject
                         'user'          => $parts[0],
                         'cpu'           => $parts[2],
                         'memory'        => $parts[3],
-                        'execution_time'=> $executionTimeMinutes,
+                        'execution_time' => $executionTimeMinutes,
                         'command'       => implode(' ', array_slice($parts, 10)),
                     ];
                 }

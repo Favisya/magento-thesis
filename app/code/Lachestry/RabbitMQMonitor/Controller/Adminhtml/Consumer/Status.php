@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\RabbitMQMonitor\Controller\Adminhtml\Consumer;
@@ -130,4 +131,4 @@ class Status extends Action
     {
         return $this->_authorization->isAllowed('Lachestry_RabbitMQMonitor::monitor');
     }
-} 
+}

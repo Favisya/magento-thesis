@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\Notifier\Cron;
@@ -22,4 +23,4 @@ class CheckStuckCronJobs
         
         $this->stuckCronChecker->execute();
     }
-} 
+}

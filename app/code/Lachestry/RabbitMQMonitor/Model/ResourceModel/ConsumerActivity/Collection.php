@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\RabbitMQMonitor\Model\ResourceModel\ConsumerActivity;
@@ -16,4 +17,4 @@ class Collection extends AbstractCollection
             ConsumerActivityResource::class
         );
     }
-} 
+}

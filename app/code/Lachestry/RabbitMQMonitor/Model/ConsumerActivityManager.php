@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\RabbitMQMonitor\Model;
@@ -51,7 +52,7 @@ class ConsumerActivityManager
 
     /**
      * Обновляет статус консьюмеров
-     * 
+     *
      * @return void
      */
     public function updateStatus(): void
@@ -72,7 +73,7 @@ class ConsumerActivityManager
     
     /**
      * Обновляет статус конкретного консьюмера в БД
-     * 
+     *
      * @param string $consumerName
      * @param string $status
      * @param int|null $pid
@@ -107,7 +108,7 @@ class ConsumerActivityManager
     
     /**
      * Получает список запущенных консьюмеров из процессов
-     * 
+     *
      * @return array
      */
     protected function getRunningConsumersFromProcesses(): array
@@ -125,7 +126,7 @@ class ConsumerActivityManager
     
     /**
      * Проверяет PID файлы
-     * 
+     *
      * @param array $runningConsumers
      * @return void
      */
@@ -159,7 +160,7 @@ class ConsumerActivityManager
     
     /**
      * Проверяет запущенные процессы
-     * 
+     *
      * @param array $runningConsumers
      * @return void
      */
@@ -193,7 +194,7 @@ class ConsumerActivityManager
     
     /**
      * Проверяет, запущен ли процесс
-     * 
+     *
      * @param int $pid
      * @return bool
      */
@@ -213,7 +214,7 @@ class ConsumerActivityManager
     
     /**
      * Получает список всех сконфигурированных консьюмеров
-     * 
+     *
      * @return array
      */
     protected function getAllConfiguredConsumers(): array
@@ -240,7 +241,7 @@ class ConsumerActivityManager
     
     /**
      * Получает запущенные консьюмеры
-     * 
+     *
      * @return array
      */
     public function getRunningConsumers(): array
@@ -259,7 +260,7 @@ class ConsumerActivityManager
     
     /**
      * Получает данные активности консьюмеров из БД
-     * 
+     *
      * @return array
      */
     public function getConsumerActivities(): array
@@ -278,4 +279,4 @@ class ConsumerActivityManager
         
         return $result;
     }
-} 
+}

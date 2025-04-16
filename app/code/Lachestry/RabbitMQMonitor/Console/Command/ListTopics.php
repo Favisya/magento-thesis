@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\RabbitMQMonitor\Console\Command;
@@ -101,4 +102,4 @@ class ListTopics extends Command
         
         return 0;
     }
-} 
+}

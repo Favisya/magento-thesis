@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\RabbitMQMonitor\Model;
@@ -11,4 +12,4 @@ class ConsumerActivity extends AbstractModel
     {
         $this->_init(\Lachestry\RabbitMQMonitor\Model\ResourceModel\ConsumerActivity::class);
     }
-} 
+}

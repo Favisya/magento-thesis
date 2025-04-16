@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lachestry\RabbitMQMonitor\Model\ResourceModel;
@@ -11,4 +12,4 @@ class ConsumerActivity extends AbstractDb
     {
         $this->_init('rabbitmq_consumer_activity', 'entity_id');
     }
-} 
+}
