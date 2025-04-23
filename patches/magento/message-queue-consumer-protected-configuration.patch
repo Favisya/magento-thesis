@@ -1,0 +1,17 @@
+Index: vendor/magento/framework-message-queue/Consumer.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/vendor/magento/framework-message-queue/Consumer.php b/vendor/magento/framework-message-queue/Consumer.php
+--- a/vendor/magento/framework-message-queue/Consumer.php
++++ b/vendor/magento/framework-message-queue/Consumer.php	(date 1745438934150)
+@@ -28,7 +28,7 @@
+     /**
+      * @var ConsumerConfigurationInterface
+      */
+-    private $configuration;
++    protected $configuration;
+
+     /**
+      * @var ResourceConnection

@@ -9,8 +9,8 @@ use Psr\Log\LoggerInterface;
 
 class UpdateConsumerStatus
 {
-    private $consumerActivityManager;
-    private $logger;
+    protected ConsumerActivityManager $consumerActivityManager;
+    protected LoggerInterface $logger;
 
     public function __construct(
         ConsumerActivityManager $consumerActivityManager,

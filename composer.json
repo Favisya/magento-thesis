@@ -11,7 +11,8 @@
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "laminas/laminas-dependency-plugin": true,
             "magento/*": true,
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "cweagans/composer-patches": true
         },
         "preferred-install": "dist",
         "sort-packages": true
@@ -23,7 +24,8 @@
         "magento/module-elasticsearch-7": "*",
         "magento/product-community-edition": "2.4.6",
         "mageplaza/magento-2-russian-language-pack": "dev-master",
-        "mageplaza/module-smtp": "^4.7"
+        "mageplaza/module-smtp": "^4.7",
+        "cweagans/composer-patches": "^1.7"
     },
     "autoload": {
         "exclude-from-classmap": [
@@ -88,7 +90,14 @@
         }
     ],
     "extra": {
-        "magento-force": "override"
+        "magento-force": "override",
+        "enable-patching": true,
+        "composer-exit-on-patch-failure": true,
+        "patches": {
+            "magento/framework-message-queue": {
+                "Make MessageQueue Consumer configuration property protected": "patches/magento/message-queue-consumer-protected-configuration.patch"
+            }
+        }
     },
     "scripts": {
         "phpcs": "phpcs --standard=phpcs.xml",

@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Cron\Model\Schedule" type="Lachestry\Notifier\Model\Cron\Schedule" />
+    <preference for="Magento\Framework\MessageQueue\Consumer" type="Lachestry\Notifier\Model\MessageQueue\Consumer" />
+
     <type name="Magento\Indexer\Model\Processor">
         <plugin
             name="Lachestry_Notifier::NotifyProcessorErrors"
@@ -48,7 +51,7 @@
             sortOrder="10"
         />
     </type>
-    
+
     <!-- MessageFormatter configuration -->
     <type name="Lachestry\Notifier\Model\MessageFormatter">
         <arguments>

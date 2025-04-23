@@ -9,18 +9,11 @@ use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Lachestry\Notifier\Model\ErrorHandler;
 use Lachestry\Notifier\Model\Config;
 
-/**
- * Plugin to catch and notify about message queue errors
- */
 class NotifyQueueErrors
 {
-    /**
-     * @param ErrorHandler $errorHandler
-     * @param Config $config
-     */
     public function __construct(
         protected readonly ErrorHandler $errorHandler,
-        protected readonly Config $config
+        protected readonly Config       $config,
     ) {
     }
 
@@ -29,15 +22,15 @@ class NotifyQueueErrors
      *
      * @param ConsumerInterface $subject
      * @param callable $proceed
-     * @param EnvelopeInterface|null $envelope
+     * @param EnvelopeInterface|string|null $envelope
      * @return void
      */
     public function aroundProcess(
         ConsumerInterface $subject,
-        callable $proceed,
-        ?EnvelopeInterface $envelope = null
+        callable          $proceed,
+                          $envelope = null,
     ): void {
-        if (!$this->config->isQueueNotificationEnabled() || $envelope === null) {
+        if (!$this->config->isQueueNotificationEnabled()) {
             $proceed($envelope);
             return;
         }
@@ -45,14 +38,36 @@ class NotifyQueueErrors
         try {
             $proceed($envelope);
         } catch (\Throwable $e) {
-            $topic = $envelope->getProperties()['topic'] ?? 'unknown';
-            $messageId = $envelope->getMessageId();
-            
-            $this->errorHandler->handleError($e, 'message_queue', [
+            $configuration = $subject->getConsumerConfiguration();
+            if (!$configuration) {
+                $this->errorHandler->handleError($e, 'message_queue', ['uknw','uknw','uknw']);
+            }
+
+            $queueName      = $configuration->getQueueName() ?? 'uknown';
+            $connectionName = $configuration->getConsumerName();
+
+            $topic = $configuration->getConsumerName() ?? 'unknown';
+            $queueInfo = [
+                'queue_name' => $queueName,
+                'connection' => $connectionName ?? 'unknown',
+            ];
+
+            if ($envelope instanceof EnvelopeInterface) {
+                $messageId = $envelope->getMessageId();
+            }
+
+            $errorData = [
                 'topic'      => $topic,
-                'message_id' => $messageId
-            ]);
-            
+                'message_id' => $messageId ?? 'unknown',
+                'consumer'   => $topic,
+            ];
+
+            if (!empty($queueInfo)) {
+                $errorData = array_merge($errorData, $queueInfo);
+            }
+
+            $this->errorHandler->handleError($e, 'message_queue', $errorData);
+
             throw $e;
         }
     }

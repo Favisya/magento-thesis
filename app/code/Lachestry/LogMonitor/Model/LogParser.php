@@ -17,17 +17,19 @@ class LogParser
         'system.log',
         'exception.log',
         'debug.log',
+        'cron.log',
+        'telegram.api.log',
     ];
 
     private const SEVERITY_MAP = [
-        'DEBUG'     => 'debug',
-        'INFO'      => 'info',
-        'NOTICE'    => 'notice',
-        'WARNING'   => 'warning',
-        'ERROR'     => 'error',
-        'CRITICAL'  => 'critical',
-        'ALERT'     => 'alert',
-        'EMERGENCY' => 'emergency',
+        'DEBUG'     => 'DEBUG',
+        'INFO'      => 'INFO',
+        'NOTICE'    => 'NOTICE',
+        'WARNING'   => 'WARNING',
+        'ERROR'     => 'ERROR',
+        'CRITICAL'  => 'CRITICAL',
+        'ALERT'     => 'ALERT',
+        'EMERGENCY' => 'EMERGENCY',
     ];
 
     private File $fileDriver;
@@ -101,7 +103,8 @@ class LogParser
         }
 
         $dateTime    = $matches[1];
-        $severityRaw = strtoupper($matches[2]);
+        $severityRaw = explode('.', strtoupper($matches[2]));
+        $severityRaw = end($severityRaw);
         $message     = $matches[3];
 
         $severity = self::SEVERITY_MAP[$severityRaw] ?? 'info';
