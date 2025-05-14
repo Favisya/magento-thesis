@@ -336,6 +336,7 @@ return [
         'Lachestry_ProcessMonitor' => 1,
         'Lachestry_RabbitMQMonitor' => 1,
         'Lachestry_Notifier' => 1,
+        'Lachestry_Test' => 1,
         'Mageplaza_Core' => 1,
         'Mageplaza_Smtp' => 1,
         'PayPal_Braintree' => 1,
