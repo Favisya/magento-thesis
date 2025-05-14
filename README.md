@@ -394,7 +394,7 @@ vendor/bin/phpunit -c dev/tests/unit/phpunit.xml.dist app/code/Lachestry
 
 ## Лицензия
 
-© 2024 Favis, Все права защищены
+© 2025 Favis, Все права защищены
 
 ---
 
@@ -794,4 +794,4 @@ vendor/bin/phpunit -c dev/tests/unit/phpunit.xml.dist app/code/Lachestry
 
 ## License
 
-© 2024 Favis, All rights reserved 
+© 2025 Favis, All rights reserved 
