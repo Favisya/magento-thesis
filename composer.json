@@ -36,16 +36,14 @@
         "files": [
             "app/etc/NonComposerComponentRegistration.php"
         ],
-        "psr-0": {
-            "": [
-                "app/code/",
-                "generated/code/"
-            ]
-        },
         "psr-4": {
-            "Magento\\": "app/code/Magento/",
             "Magento\\Framework\\": "lib/internal/Magento/Framework/",
-            "Magento\\Setup\\": "setup/src/Magento/Setup/"
+            "Magento\\Setup\\": "setup/src/Magento/Setup/",
+            "Magento\\": "app/code/Magento/",
+            "Lachestry\\": "app/code/Lachestry/"
+        },
+        "psr-0": {
+            "": "app/code/"
         }
     },
     "require-dev": {
@@ -69,12 +67,13 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Magento\\PhpStan\\": "dev/tests/static/framework/Magento/PhpStan/",
             "Magento\\Sniffs\\": "dev/tests/static/framework/Magento/Sniffs/",
-            "Magento\\TestFramework\\Inspection\\": "dev/tests/static/framework/Magento/TestFramework/Inspection/",
-            "Magento\\TestFramework\\Utility\\": "dev/tests/static/framework/Magento/TestFramework/Utility/",
             "Magento\\Tools\\": "dev/tools/Magento/Tools/",
-            "Magento\\Tools\\Sanity\\": "dev/build/publication/sanity/Magento/Tools/Sanity/"
+            "Magento\\Tools\\Sanity\\": "dev/build/publication/sanity/Magento/Tools/Sanity/",
+            "Magento\\TestFramework\\Inspection\\": "dev/tests/api/Magento/TestFramework/Inspection/",
+            "Magento\\TestFramework\\Utility\\": "dev/tests/static/framework/Magento/TestFramework/Utility/",
+            "Lachestry\\Test\\": "app/code/Lachestry/Test/",
+            "Lachestry\\": "app/code/Lachestry/"
         }
     },
     "minimum-stability": "stable",
