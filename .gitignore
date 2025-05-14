@@ -100,3 +100,8 @@ gulp/config/browser-sync.json
 /i18n/
 
 .php-cs-fixer.dist.php
+/phpserver/
+
+#отслеживать эти конкретные файлы
+!README.md
+!database_structure.md
