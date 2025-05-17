@@ -12,8 +12,9 @@
 
 - PHP 8.1
 - Magento 2.4.6
-- MySQL 8.0
-- RabbitMQ 3.9
+- MySQL 5.7
+- RabbitMQ 3.13
+- Elasticsearch 7
 - Nginx
 - Composer 2
 - Docker (опционально)
@@ -55,9 +56,9 @@
 ### Требования
 
 - PHP 8.1 или выше
-- MySQL 8.0 или выше
+- MySQL 5.7 или выше
 - Nginx
-- RabbitMQ 3.9 или выше
+- RabbitMQ 3.13 или выше
 - Composer 2
 
 ### Установка
@@ -314,7 +315,7 @@
          - magento-network
 
      db:
-       image: mysql:8.0
+       image: mysql:5.7
        ports:
          - "3306:3306"
        environment:
@@ -328,7 +329,7 @@
          - magento-network
 
      rabbitmq:
-       image: rabbitmq:3.9-management
+       image: rabbitmq:3.13-management
        ports:
          - "5672:5672"
          - "15672:15672"
@@ -412,8 +413,8 @@ Detailed information about the database structure is available in [database_stru
 
 - PHP 8.1
 - Magento 2.4.6
-- MySQL 8.0
-- RabbitMQ 3.9
+- MySQL 5.7
+- RabbitMQ 3.13
 - Nginx
 - Composer 2
 - Docker (optional)
@@ -455,9 +456,10 @@ The module provides notification sending via Telegram:
 ### Requirements
 
 - PHP 8.1 or higher
-- MySQL 8.0 or higher
+- MySQL 5.7 or higher
 - Nginx
-- RabbitMQ 3.9 or higher
+- RabbitMQ 3.13 or higher
+- Elasticsearch 7
 - Composer 2
 
 ### Installation
@@ -714,7 +716,7 @@ For simplified development, you can use Docker:
          - magento-network
 
      db:
-       image: mysql:8.0
+       image: mysql:5.7
        ports:
          - "3306:3306"
        environment:
@@ -728,7 +730,7 @@ For simplified development, you can use Docker:
          - magento-network
 
      rabbitmq:
-       image: rabbitmq:3.9-management
+       image: rabbitmq:3.13-management
        ports:
          - "5672:5672"
          - "15672:15672"
