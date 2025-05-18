@@ -17,4 +17,7 @@
 "Date","Дата"
 "Severity","Серьезность"
 "Message","Сообщение"
-"Context","Контекст" 
+"Context","Контекст"
+"From Date","От даты"
+"To Date","До даты"
+"Apply Filters","Применить фильтры" 

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Lachestry_Test::lachestry_test"
+             title="Test Runner"
+             module="Lachestry_Test"
+             translate="title"
+             sortOrder="60"
+             parent="Lachestry_Base::menu"
+             resource="Lachestry_Test::test"/>
+    </menu>
+</config> 

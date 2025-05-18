@@ -3,5 +3,20 @@
     <menu>
         <add id="Lachestry_ProcessMonitor::process_monitor" title="Process Monitor" module="Lachestry_ProcessMonitor" sortOrder="100" parent="Magento_Backend::system" resource="Lachestry_ProcessMonitor::process_monitor"/>
         <add id="Lachestry_ProcessMonitor::process_list" title="Daemon Processes" module="Lachestry_ProcessMonitor" sortOrder="10" parent="Lachestry_ProcessMonitor::process_monitor" action="processmonitor/process/index" resource="Lachestry_ProcessMonitor::process_list"/>
+        
+        <!-- Добавляем пункт в меню Lachestry -->
+        <add id="Lachestry_ProcessMonitor::lachestry_process_monitor" 
+             title="Process Monitor" 
+             module="Lachestry_ProcessMonitor" 
+             sortOrder="50" 
+             parent="Lachestry_Base::menu" 
+             resource="Lachestry_ProcessMonitor::process_monitor"/>
+        <add id="Lachestry_ProcessMonitor::lachestry_process_list" 
+             title="Daemon Processes" 
+             module="Lachestry_ProcessMonitor" 
+             sortOrder="10" 
+             parent="Lachestry_ProcessMonitor::lachestry_process_monitor" 
+             action="processmonitor/process/index" 
+             resource="Lachestry_ProcessMonitor::process_list"/>
     </menu>
 </config> 

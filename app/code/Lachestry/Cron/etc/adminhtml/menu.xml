@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Lachestry_Cron::cron"
+             title="Cron Management"
+             module="Lachestry_Cron"
+             translate="title"
+             sortOrder="15"
+             parent="Lachestry_Base::menu"
+             resource="Lachestry_Cron::cron"/>
+    </menu>
+</config> 
