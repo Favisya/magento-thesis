@@ -19,12 +19,12 @@ class MassDisable extends Action
     /**
      * @var Filter
      */
-    protected $filter;
+    protected Filter $filter;
 
     /**
      * @var CollectionFactory
      */
-    protected $collectionFactory;
+    protected CollectionFactory $collectionFactory;
 
     /**
      * @param Context $context
@@ -32,11 +32,11 @@ class MassDisable extends Action
      * @param CollectionFactory $collectionFactory
      */
     public function __construct(
-        Context $context,
-        Filter $filter,
-        CollectionFactory $collectionFactory
+        Context           $context,
+        Filter            $filter,
+        CollectionFactory $collectionFactory,
     ) {
-        $this->filter = $filter;
+        $this->filter            = $filter;
         $this->collectionFactory = $collectionFactory;
         parent::__construct($context);
     }
@@ -50,7 +50,7 @@ class MassDisable extends Action
     {
         try {
             $collection = $this->filter->getCollection($this->collectionFactory->create());
-            $disabled = 0;
+            $disabled   = 0;
             foreach ($collection as $item) {
                 $item->setData(TelegramChatInterface::IS_ACTIVE, 0);
                 $item->save();

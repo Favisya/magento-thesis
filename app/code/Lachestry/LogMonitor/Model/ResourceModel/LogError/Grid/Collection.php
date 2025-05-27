@@ -18,18 +18,18 @@ use Lachestry\LogMonitor\Model\ResourceModel\LogError\Collection as LogErrorColl
 
 class Collection extends LogErrorCollection implements SearchResultInterface
 {
-    protected $aggregations;
+    protected AggregationInterface $aggregations;
 
     public function __construct(
         EntityFactoryInterface $entityFactory,
-        LoggerInterface $logger,
+        LoggerInterface        $logger,
         FetchStrategyInterface $fetchStrategy,
-        ManagerInterface $eventManager,
-        $mainTable,
-        $resourceModel,
-        $model = Document::class,
-        AdapterInterface $connection = null,
-        AbstractDb $resource = null
+        ManagerInterface       $eventManager,
+                               $mainTable,
+                               $resourceModel,
+                               $model = Document::class,
+        AdapterInterface       $connection = null,
+        AbstractDb             $resource = null,
     ) {
         parent::__construct(
             $entityFactory,

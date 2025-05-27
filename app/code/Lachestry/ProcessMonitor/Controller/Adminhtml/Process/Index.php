@@ -14,26 +14,26 @@ use Lachestry\ProcessMonitor\Model\Process;
 
 class Index extends Action
 {
-    protected $resultPageFactory;
-    protected $resultJsonFactory;
-    protected $resultLayoutFactory;
-    protected $process;
-    protected $request;
+    protected PageFactory $resultPageFactory;
+    protected JsonFactory $resultJsonFactory;
+    protected LayoutFactory $resultLayoutFactory;
+    protected Process $process;
+    protected RequestInterface $request;
 
     public function __construct(
-        Context $context,
-        PageFactory $resultPageFactory,
-        JsonFactory $resultJsonFactory,
-        LayoutFactory $resultLayoutFactory,
-        Process $process,
-        RequestInterface $request
+        Context          $context,
+        PageFactory      $resultPageFactory,
+        JsonFactory      $resultJsonFactory,
+        LayoutFactory    $resultLayoutFactory,
+        Process          $process,
+        RequestInterface $request,
     ) {
         parent::__construct($context);
-        $this->resultPageFactory = $resultPageFactory;
-        $this->resultJsonFactory = $resultJsonFactory;
+        $this->resultPageFactory   = $resultPageFactory;
+        $this->resultJsonFactory   = $resultJsonFactory;
         $this->resultLayoutFactory = $resultLayoutFactory;
-        $this->process = $process;
-        $this->request = $request;
+        $this->process             = $process;
+        $this->request             = $request;
     }
 
     public function execute()
@@ -48,16 +48,16 @@ class Index extends Action
         if (!$this->_isAllowed()) {
             return $this->resultJsonFactory->create()->setData([
                 'success' => false,
-                'message' => __('Access denied.')
+                'message' => __('Access denied.'),
             ]);
         }
 
         $resultJson = $this->resultJsonFactory->create();
-        $processes = $this->process->getProcessList();
-        
+        $processes  = $this->process->getProcessList();
+
         return $resultJson->setData([
             'success' => true,
-            'data' => $processes
+            'data'    => $processes,
         ]);
     }
 

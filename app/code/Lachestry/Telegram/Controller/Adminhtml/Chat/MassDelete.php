@@ -19,17 +19,17 @@ class MassDelete extends Action
     /**
      * @var Filter
      */
-    protected $filter;
+    protected Filter $filter;
 
     /**
      * @var CollectionFactory
      */
-    protected $collectionFactory;
+    protected CollectionFactory $collectionFactory;
 
     /**
      * @var TelegramChat
      */
-    protected $telegramChatResource;
+    protected TelegramChat $telegramChatResource;
 
     /**
      * @param Context $context
@@ -38,13 +38,13 @@ class MassDelete extends Action
      * @param TelegramChat $telegramChatResource
      */
     public function __construct(
-        Context $context,
-        Filter $filter,
+        Context           $context,
+        Filter            $filter,
         CollectionFactory $collectionFactory,
-        TelegramChat $telegramChatResource
+        TelegramChat      $telegramChatResource,
     ) {
-        $this->filter = $filter;
-        $this->collectionFactory = $collectionFactory;
+        $this->filter               = $filter;
+        $this->collectionFactory    = $collectionFactory;
         $this->telegramChatResource = $telegramChatResource;
         parent::__construct($context);
     }
@@ -58,7 +58,7 @@ class MassDelete extends Action
     {
         try {
             $collection = $this->filter->getCollection($this->collectionFactory->create());
-            $deleted = 0;
+            $deleted    = 0;
             foreach ($collection as $item) {
                 $item->delete();
                 $deleted++;

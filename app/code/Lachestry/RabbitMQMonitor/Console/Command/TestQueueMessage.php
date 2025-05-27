@@ -53,34 +53,34 @@ class TestQueueMessage extends Command
     protected ?TypeProcessor $typeProcessor;
 
     public function __construct(
-        PublisherInterface $publisher,
-        SerializerInterface $serializer,
-        ConsumerConfigInterface $consumerConfig,
-        ResourceConnection $resourceConnection,
-        TopologyConfigInterface $topologyConfig,
-        DeploymentConfig $deploymentConfig,
-        TopicList $topicList,
-        State $appState,
-        OperationInterfaceFactory $operationFactory = null,
+        PublisherInterface          $publisher,
+        SerializerInterface         $serializer,
+        ConsumerConfigInterface     $consumerConfig,
+        ResourceConnection          $resourceConnection,
+        TopologyConfigInterface     $topologyConfig,
+        DeploymentConfig            $deploymentConfig,
+        TopicList                   $topicList,
+        State                       $appState,
+        OperationInterfaceFactory   $operationFactory = null,
         BulkSummaryInterfaceFactory $bulkSummaryFactory = null,
-        IdentityGeneratorInterface $identityService = null,
-        MessageValidator $messageValidator = null,
-        TypeProcessor $typeProcessor = null,
-        string $name = null
+        IdentityGeneratorInterface  $identityService = null,
+        MessageValidator            $messageValidator = null,
+        TypeProcessor               $typeProcessor = null,
+        string                      $name = null,
     ) {
-        $this->publisher = $publisher;
-        $this->serializer = $serializer;
-        $this->consumerConfig = $consumerConfig;
+        $this->publisher          = $publisher;
+        $this->serializer         = $serializer;
+        $this->consumerConfig     = $consumerConfig;
         $this->resourceConnection = $resourceConnection;
-        $this->topologyConfig = $topologyConfig;
-        $this->deploymentConfig = $deploymentConfig;
-        $this->topicList = $topicList;
-        $this->appState = $appState;
-        $this->operationFactory = $operationFactory;
+        $this->topologyConfig     = $topologyConfig;
+        $this->deploymentConfig   = $deploymentConfig;
+        $this->topicList          = $topicList;
+        $this->appState           = $appState;
+        $this->operationFactory   = $operationFactory;
         $this->bulkSummaryFactory = $bulkSummaryFactory;
-        $this->identityService = $identityService;
-        $this->messageValidator = $messageValidator;
-        $this->typeProcessor = $typeProcessor;
+        $this->identityService    = $identityService;
+        $this->messageValidator   = $messageValidator;
+        $this->typeProcessor      = $typeProcessor;
         parent::__construct($name);
     }
 
@@ -133,7 +133,7 @@ class TestQueueMessage extends Command
                 'Meta information for async operations',
                 '{}'
             );
-        
+
         parent::configure();
     }
 
@@ -143,15 +143,15 @@ class TestQueueMessage extends Command
             $this->appState->setAreaCode('global');
         } catch (LocalizedException $e) {
         }
-        
+
         if ($input->getOption(self::OPTION_LIST_TOPICS)) {
             $this->listTopicsAndConsumers($output);
             return Cli::RETURN_SUCCESS;
         }
-        
-        $topic = $input->getArgument(self::ARGUMENT_TOPIC);
+
+        $topic        = $input->getArgument(self::ARGUMENT_TOPIC);
         $consumerName = $input->getOption(self::OPTION_CONSUMER);
-        
+
         if (!$topic && !$consumerName) {
             $output->writeln(
                 '<e>You must specify either a topic name or a consumer name</e>'
@@ -161,10 +161,10 @@ class TestQueueMessage extends Command
             );
             return Cli::RETURN_FAILURE;
         }
-        
+
         if (!$topic && $consumerName) {
             $topic = $this->getTopicForConsumer($consumerName);
-            
+
             if (!$topic) {
                 $output->writeln(
                     "<e>Could not find topic for consumer '{$consumerName}'</e>"
@@ -174,21 +174,21 @@ class TestQueueMessage extends Command
                 );
                 return Cli::RETURN_FAILURE;
             }
-            
+
             $output->writeln(
                 "<info>Using topic '{$topic}' for consumer '{$consumerName}'</info>"
             );
         }
-        
-        $message = $input->getOption(self::OPTION_MESSAGE);
+
+        $message     = $input->getOption(self::OPTION_MESSAGE);
         $contentType = strtolower($input->getOption(self::OPTION_CONTENT_TYPE));
-        $entityId = $input->getOption(self::OPTION_ENTITY_ID);
-        $metaInfo = $input->getOption(self::OPTION_META_INFO);
-        
+        $entityId    = $input->getOption(self::OPTION_ENTITY_ID);
+        $metaInfo    = $input->getOption(self::OPTION_META_INFO);
+
         try {
             $messageType = $this->getRequiredMessageType($topic);
             $output->writeln("<info>Detected required message type: {$messageType}</info>");
-            
+
             $processedMessage = $this->prepareMessageForTopic(
                 $topic,
                 $message,
@@ -197,17 +197,17 @@ class TestQueueMessage extends Command
                 $metaInfo,
                 $messageType
             );
-            
+
             $this->publisher->publish($topic, $processedMessage);
             $output->writeln(
                 "<info>Message sent successfully to topic '{$topic}'</info>"
             );
-            
+
             $output->writeln("<info>Message type: " . gettype($processedMessage) . "</info>");
             if (is_object($processedMessage)) {
                 $output->writeln("<info>Message class: " . get_class($processedMessage) . "</info>");
             }
-            
+
             return Cli::RETURN_SUCCESS;
         } catch (\Exception $e) {
             $output->writeln(
@@ -216,85 +216,85 @@ class TestQueueMessage extends Command
             return Cli::RETURN_FAILURE;
         }
     }
-    
+
     protected function getRequiredMessageType(string $topic): ?string
     {
         try {
             if (!$this->messageValidator || !$this->typeProcessor) {
-                $objectManager = ObjectManager::getInstance();
+                $objectManager          = ObjectManager::getInstance();
                 $this->messageValidator = $objectManager->get(MessageValidator::class);
-                $this->typeProcessor = $objectManager->get(TypeProcessor::class);
+                $this->typeProcessor    = $objectManager->get(TypeProcessor::class);
             }
-            
-            if (            strpos($topic, 'async.') === 0 ||
+
+            if (strpos($topic, 'async.') === 0 ||
                 strpos($topic, 'async.V1.') === 0 ||
                 strpos($topic, 'product_action_attribute.') === 0
             ) {
                 return \Magento\AsynchronousOperations\Api\Data\OperationInterface::class;
             }
-            
+
             $property = new \ReflectionProperty($this->messageValidator, 'topicMessageMapping');
             $property->setAccessible(true);
             $topicMessageMapping = $property->getValue($this->messageValidator);
-            
+
             if (isset($topicMessageMapping[$topic])) {
                 return $topicMessageMapping[$topic];
             }
-            
+
             return null;
         } catch (\Exception $e) {
             return null;
         }
     }
-    
+
     protected function prepareMessageForTopic(
-        string $topic,
-        $message,
-        string $contentType,
-        $entityId,
-        $metaInfo,
-        ?string $messageType
+        string  $topic,
+                $message,
+        string  $contentType,
+                $entityId,
+                $metaInfo,
+        ?string $messageType,
     ) {
-        if (            $messageType === \Magento\AsynchronousOperations\Api\Data\OperationInterface::class
+        if ($messageType === \Magento\AsynchronousOperations\Api\Data\OperationInterface::class
             || is_subclass_of($messageType, \Magento\AsynchronousOperations\Api\Data\OperationInterface::class)
         ) {
             return $this->createAsyncOperationMessage($topic, $message, $entityId, $metaInfo);
         }
-        
+
         return $this->processMessage($message, $contentType);
     }
-    
+
     protected function createAsyncOperationMessage(string $topic, $message, $entityId, $metaInfo)
     {
         if (!$this->operationFactory) {
-            $objectManager = ObjectManager::getInstance();
-            $this->operationFactory = $objectManager->get(OperationInterfaceFactory::class);
+            $objectManager            = ObjectManager::getInstance();
+            $this->operationFactory   = $objectManager->get(OperationInterfaceFactory::class);
             $this->bulkSummaryFactory = $objectManager->get(BulkSummaryInterfaceFactory::class);
-            $this->identityService = $objectManager->get(IdentityGeneratorInterface::class);
+            $this->identityService    = $objectManager->get(IdentityGeneratorInterface::class);
         }
-        
+
         try {
             $metaInfoArray = json_decode($metaInfo, true);
         } catch (\Exception $e) {
             $metaInfoArray = [];
         }
-        
+
         if (!is_array($metaInfoArray)) {
             $metaInfoArray = [];
         }
-        
+
         $operationId = $this->identityService->generateId();
-        $bulkUuid = $this->identityService->generateId();
-        
+        $bulkUuid    = $this->identityService->generateId();
+
         if (is_string($message) && json_decode($message) === null) {
             $serializedData = $this->serializer->serialize([
                 'entity_id' => $entityId,
-                'message' => $message
+                'message'   => $message,
             ]);
         } else {
             $serializedData = is_string($message) ? $message : $this->serializer->serialize($message);
         }
-        
+
         $operation = $this->operationFactory->create();
         $operation->setBulkUuid($bulkUuid)
             ->setTopicName($topic)
@@ -303,19 +303,19 @@ class TestQueueMessage extends Command
             ->setOperationId($operationId)
             ->setResultMessage('')
             ->setErrorCode(null);
-        
+
         if (!isset($metaInfoArray['user_id'])) {
             $metaInfoArray['user_id'] = UserContextInterface::USER_TYPE_ADMIN;
         }
         if (!isset($metaInfoArray['meta_information'])) {
             $metaInfoArray['meta_information'] = 'Test operation created by RabbitMQ Monitor extension';
         }
-        
+
         $operation->setMetadata($this->serializer->serialize($metaInfoArray));
-        
+
         return $operation;
     }
-    
+
     protected function processMessage($message, string $contentType)
     {
         switch ($contentType) {
@@ -324,42 +324,42 @@ class TestQueueMessage extends Command
                     return $this->serializer->unserialize($message);
                 }
                 return $message;
-            
+
             case 'raw':
                 return $message;
-            
+
             case 'string':
             default:
                 if (is_array($message)) {
                     return $this->serializer->serialize($message);
                 }
-                return (string)$message;
+                return (string) $message;
         }
     }
-    
+
     protected function listTopicsAndConsumers(OutputInterface $output)
     {
-        $topics = $this->getAllTopics();
+        $topics           = $this->getAllTopics();
         $consumerTopicMap = $this->getConsumerTopicMap();
-        
+
         $output->writeln('<info>Available Topics:</info>');
         foreach ($topics as $topic) {
             $messageType = $this->getRequiredMessageType($topic) ?: 'unknown';
             $output->writeln("  - {$topic} (type: {$messageType})");
         }
-        
+
         $output->writeln('');
         $output->writeln('<info>Available Consumers and their Topics:</info>');
         foreach ($consumerTopicMap as $consumer => $topic) {
             $output->writeln("  - {$consumer} -> {$topic}");
         }
     }
-    
+
     protected function getTopicForConsumer(string $consumerName): ?string
     {
         return $this->topicList->getTopicForConsumer($consumerName);
     }
-    
+
     protected function findConsumerByName(string $name)
     {
         foreach ($this->consumerConfig->getConsumers() as $consumer) {
@@ -367,25 +367,25 @@ class TestQueueMessage extends Command
                 return $consumer;
             }
         }
-        
+
         return null;
     }
-    
+
     protected function findTopicByHandler(string $handler): ?string
     {
         $crontabConsumersConfig = $this->deploymentConfig->get('crontab') ?? [];
         foreach ($crontabConsumersConfig as $jobCode => $jobConfig) {
             if (
-            isset($jobConfig['instance'], $jobConfig['method']) &&
+                isset($jobConfig['instance'], $jobConfig['method']) &&
                 $jobConfig['instance'] === 'Magento\MessageQueue\Model\Cron\ConsumersRunner' &&
                 $jobConfig['method'] === 'run'
             ) {
                 if (
-                isset($jobConfig['arguments']['consumerId']['value']) &&
+                    isset($jobConfig['arguments']['consumerId']['value']) &&
                     $jobConfig['arguments']['consumerId']['value'] === $handler
                 ) {
                     if (
-                    isset($jobConfig['arguments']['consumerOptions']['value']) &&
+                        isset($jobConfig['arguments']['consumerOptions']['value']) &&
                         isset($jobConfig['arguments']['consumerOptions']['value']['topics']) &&
                         !empty($jobConfig['arguments']['consumerOptions']['value']['topics'])
                     ) {
@@ -394,15 +394,15 @@ class TestQueueMessage extends Command
                 }
             }
         }
-        
+
         return null;
     }
-    
+
     protected function getAllTopics(): array
     {
         return $this->topicList->getTopics();
     }
-    
+
     protected function getConsumerTopicMap(): array
     {
         return $this->topicList->getConsumerTopicMap();

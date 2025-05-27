@@ -15,7 +15,7 @@ use Lachestry\RabbitMQMonitor\Model\TopicList;
 class Consumers extends Template
 {
     protected $_template = 'Lachestry_RabbitMQMonitor::consumers.phtml';
-    
+
     protected ConsumerConfigInterface $consumerConfig;
     protected DeploymentConfig $deploymentConfig;
     protected ConsumersRunner $consumersRunner;
@@ -24,92 +24,92 @@ class Consumers extends Template
     protected TopicList $topicList;
 
     public function __construct(
-        Template\Context $context,
+        Template\Context        $context,
         ConsumerConfigInterface $consumerConfig,
-        DeploymentConfig $deploymentConfig,
-        ConsumersRunner $consumersRunner,
-        DirectoryList $directoryList,
+        DeploymentConfig        $deploymentConfig,
+        ConsumersRunner         $consumersRunner,
+        DirectoryList           $directoryList,
         ConsumerActivityManager $consumerActivityManager,
-        TopicList $topicList,
-        array $data = []
+        TopicList               $topicList,
+        array                   $data = [],
     ) {
-        $this->consumerConfig = $consumerConfig;
-        $this->deploymentConfig = $deploymentConfig;
-        $this->consumersRunner = $consumersRunner;
-        $this->directoryList = $directoryList;
+        $this->consumerConfig          = $consumerConfig;
+        $this->deploymentConfig        = $deploymentConfig;
+        $this->consumersRunner         = $consumersRunner;
+        $this->directoryList           = $directoryList;
         $this->consumerActivityManager = $consumerActivityManager;
-        $this->topicList = $topicList;
+        $this->topicList               = $topicList;
         parent::__construct($context, $data);
     }
 
     public function getConsumers(): array
     {
-        $result = [];
+        $result           = [];
         $allowedConsumers = $this->getAllowedConsumers();
-        $consumerConfig = $this->consumerConfig->getConsumers();
+        $consumerConfig   = $this->consumerConfig->getConsumers();
         $runningConsumers = $this->consumerActivityManager->getRunningConsumers();
         $consumerTopicMap = $this->topicList->getConsumerTopicMap();
-        
+
         foreach ($consumerConfig as $consumer) {
             $consumerName = $consumer->getName();
-            $isAllowed = empty($allowedConsumers) || in_array($consumerName, $allowedConsumers);
-            $isRunning = array_key_exists($consumerName, $runningConsumers);
-            
+            $isAllowed    = empty($allowedConsumers) || in_array($consumerName, $allowedConsumers);
+            $isRunning    = array_key_exists($consumerName, $runningConsumers);
+
             $consumerData = [
-                'name' => $consumerName,
+                'name'       => $consumerName,
                 'connection' => $consumer->getConnection(),
-                'queue' => $consumer->getQueue(),
-                'topic' => $consumerTopicMap[$consumerName] ?? '-',
-                'status' => $this->determineConsumerStatus($consumerName, $isRunning, $isAllowed)
+                'queue'      => $consumer->getQueue(),
+                'topic'      => $consumerTopicMap[$consumerName] ?? '-',
+                'status'     => $this->determineConsumerStatus($consumerName, $isRunning, $isAllowed),
             ];
-            
+
             if ($isRunning) {
-                $activityData = $runningConsumers[$consumerName];
+                $activityData        = $runningConsumers[$consumerName];
                 $consumerData['pid'] = $activityData->getPid();
-                $lastActivity = $activityData->getLastActivity();
-                
+                $lastActivity        = $activityData->getLastActivity();
+
                 if ($lastActivity) {
                     $consumerData['last_activity'] = $this->formatCustomDate($lastActivity);
                 }
             }
-            
+
             $result[] = $consumerData;
         }
-        
+
         usort($result, function ($a, $b) {
             return strcmp($a['name'], $b['name']);
         });
-        
+
         return $result;
     }
-    
+
     protected function determineConsumerStatus(
         string $consumerName,
-        bool $isRunning,
-        bool $isAllowed
+        bool   $isRunning,
+        bool   $isAllowed,
     ): string {
         if ($isRunning) {
             return 'Running';
         }
-        
+
         if (!$isAllowed) {
             return 'Disabled';
         }
-        
+
         return 'Stopped';
     }
-    
+
     protected function getAllowedConsumers(): array
     {
         $queueConfig = $this->deploymentConfig->get('queue');
-        
+
         if (isset($queueConfig['consumers_wait_for_messages'])) {
             $consumersConfig = $this->deploymentConfig->get('cron_consumers_runner/consumers');
-            
+
             if (is_array($consumersConfig) && !empty($consumersConfig)) {
                 return $consumersConfig;
             }
-            
+
             if ($this->deploymentConfig->get('cron_consumers_runner/cron_run')) {
                 $allConsumers = [];
                 foreach ($this->consumerConfig->getConsumers() as $consumer) {
@@ -118,16 +118,16 @@ class Consumers extends Template
                 return $allConsumers;
             }
         }
-        
+
         return [];
     }
-    
+
     protected function formatCustomDate($dateTime): string
     {
         if (!$dateTime) {
             return '-';
         }
-        
+
         $date = new \DateTime($dateTime);
         return $date->format('Y-m-d H:i:s');
     }

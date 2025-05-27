@@ -12,17 +12,17 @@ use Lachestry\ProcessMonitor\Model\Process;
 
 class Collection extends SearchResult
 {
-    protected $process;
+    protected Process $process;
 
     public function __construct(
         EntityFactory $entityFactory,
-        Logger $logger,
+        Logger        $logger,
         FetchStrategy $fetchStrategy,
-        Process $process,
-        $mainTable = 'process_listing',
-        $resourceModel = null,
-        $identifierName = null,
-        $connectionName = null
+        Process       $process,
+                      $mainTable = 'process_listing',
+                      $resourceModel = null,
+                      $identifierName = null,
+                      $connectionName = null,
     ) {
         $this->process = $process;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $mainTable, $resourceModel, $identifierName, $connectionName);

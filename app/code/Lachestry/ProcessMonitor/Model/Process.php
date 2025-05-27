@@ -16,17 +16,17 @@ class Process extends DataObject
     /**
      * @var Shell
      */
-    private $shell;
+    private Shell $shell;
 
     /**
      * @var CommandRendererInterface
      */
-    private $commandRenderer;
+    private CommandRendererInterface $commandRenderer;
 
     /**
      * @var DirectoryList
      */
-    private $directoryList;
+    private DirectoryList $directoryList;
 
     /**
      * @param Shell $shell
@@ -35,15 +35,15 @@ class Process extends DataObject
      * @param array $data
      */
     public function __construct(
-        Shell $shell,
+        Shell                    $shell,
         CommandRendererInterface $commandRenderer,
-        DirectoryList $directoryList,
-        array $data = []
+        DirectoryList            $directoryList,
+        array                    $data = [],
     ) {
         parent::__construct($data);
-        $this->shell = $shell;
+        $this->shell           = $shell;
         $this->commandRenderer = $commandRenderer;
-        $this->directoryList = $directoryList;
+        $this->directoryList   = $directoryList;
     }
 
     /**
@@ -56,7 +56,7 @@ class Process extends DataObject
         $processes = [];
         try {
             $output = $this->shell->execute('ps aux | grep -i "magento" | grep -v grep');
-            $lines = explode(PHP_EOL, $output);
+            $lines  = explode(PHP_EOL, $output);
             foreach ($lines as $line) {
                 if (empty(trim($line))) {
                     continue;
@@ -64,21 +64,21 @@ class Process extends DataObject
                 $parts = preg_split('/\s+/', trim($line));
                 if (count($parts) >= 11) {
                     $startTime = implode(' ', array_slice($parts, 8, 2));
-                    
+
                     $executionTimeMinutes = 0;
                     if (preg_match('/(\d+):(\d+)/', $parts[9], $matches)) {
-                        $executionTimeMinutes = (int)$matches[1] * 60 + (int)$matches[2];
+                        $executionTimeMinutes = (int) $matches[1] * 60 + (int) $matches[2];
                     } elseif (preg_match('/(\d+)-(\d+):(\d+)/', $startTime, $matches)) {
-                        $executionTimeMinutes = (int)$matches[1] * 24 * 60 + (int)$matches[2] * 60 + (int)$matches[3];
+                        $executionTimeMinutes = (int) $matches[1] * 24 * 60 + (int) $matches[2] * 60 + (int) $matches[3];
                     }
-                    
+
                     $processes[] = [
-                        'pid'           => $parts[1],
-                        'user'          => $parts[0],
-                        'cpu'           => $parts[2],
-                        'memory'        => $parts[3],
+                        'pid'            => $parts[1],
+                        'user'           => $parts[0],
+                        'cpu'            => $parts[2],
+                        'memory'         => $parts[3],
                         'execution_time' => $executionTimeMinutes,
-                        'command'       => implode(' ', array_slice($parts, 10)),
+                        'command'        => implode(' ', array_slice($parts, 10)),
                     ];
                 }
             }

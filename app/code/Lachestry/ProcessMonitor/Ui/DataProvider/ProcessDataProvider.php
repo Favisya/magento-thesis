@@ -17,7 +17,7 @@ class ProcessDataProvider extends DataProvider
     /**
      * @var Process
      */
-    private $processModel;
+    private Process $processModel;
 
     public function __construct(
         $name,
@@ -30,7 +30,7 @@ class ProcessDataProvider extends DataProvider
         FilterBuilder $filterBuilder,
         Process $processModel,
         array $meta = [],
-        array $data = []
+        array $data = [],
     ) {
         parent::__construct(
             $name,
@@ -49,16 +49,16 @@ class ProcessDataProvider extends DataProvider
     public function getData()
     {
         $processes = $this->processModel->getProcessList();
-        $items = [];
+        $items     = [];
 
         foreach ($processes as $process) {
             $items[] = [
-                'pid'           => $process['pid'],
-                'user'          => $process['user'],
-                'cpu'           => $process['cpu'],
-                'memory'        => $process['memory'],
+                'pid'            => $process['pid'],
+                'user'           => $process['user'],
+                'cpu'            => $process['cpu'],
+                'memory'         => $process['memory'],
                 'execution_time' => $process['execution_time'],
-                'command'       => $process['command'],
+                'command'        => $process['command'],
             ];
         }
 
