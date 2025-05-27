@@ -1,4 +1,5 @@
-# Система мониторинга и управления задачами Magento 2
+# Система мониторинга фоновых процессов для платформы
+электронной коммерции Magento
 
 **Дипломная работа**
 
@@ -399,7 +400,7 @@ vendor/bin/phpunit -c dev/tests/unit/phpunit.xml.dist app/code/Lachestry
 
 ---
 
-# Magento 2 Task Monitoring and Management System
+# Diptychs Background Process System for Magento eCommerce Platform
 
 **Thesis Project**
 
